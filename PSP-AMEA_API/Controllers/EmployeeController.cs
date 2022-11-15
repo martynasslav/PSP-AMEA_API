@@ -10,7 +10,7 @@ namespace PSP_AMEA_API.Controllers
 {
 	[Route("v1/[controller]")]
 	[ApiController]
-	public class EmployeeABCController : ControllerBase
+	public class EmployeeController : ControllerBase
 	{
 		[HttpGet("{id}", Name = "GetEmployee")]
 		public Employee GetEmployee(Guid id)
