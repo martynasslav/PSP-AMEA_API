@@ -12,17 +12,17 @@ namespace PSP_AMEA_API.Controllers
 	[ApiController]
 	public class EmployeeController : ControllerBase
 	{
-
 		/// <summary>
-		/// Gets information about an employee from specified id.
+		/// Gets information about an employee from specified employee identifier.
 		/// </summary>
-		/// <param name="id">Employee Id</param>
-		/// <returns>Information about employee.</returns>
+		/// <param name="id">Unique employee identifier</param>
+		/// <returns></returns>
+		/// <response code="200">Information about an employee returned.</response>
+		[ProducesResponseType(200)]
 		[HttpGet("{id}", Name = "GetEmployee")]
 		public Employee GetEmployee(Guid id)
 		{
 			return new Employee();
 		}
-		
 	}
 }
