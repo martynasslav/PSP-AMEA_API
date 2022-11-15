@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 class Program
 {
@@ -13,6 +15,9 @@ class Program
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen(c => {
 			c.SwaggerDoc("v1", new OpenApiInfo { Title = "AMEA API", Version = "v1" });
+
+			var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+			c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 		});
 
 		var app = builder.Build();
