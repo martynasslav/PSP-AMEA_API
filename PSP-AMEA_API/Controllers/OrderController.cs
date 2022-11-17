@@ -8,6 +8,7 @@ namespace PSP_AMEA_API.Controllers
 	public class OrderController : ControllerBase
 	{
 		private static List<Order> s_Orders = new List<Order>();
+		private static List<Cart> s_Carts = new List<Cart>();
 
 		[HttpGet]
 		public IEnumerable<Guid> GetOrderIds()
@@ -40,6 +41,24 @@ namespace PSP_AMEA_API.Controllers
 		public void DeleteOrderById(Guid id)
 		{
 			s_Orders = s_Orders.Where(o => o.Id != id).ToList();
+		}
+
+		[HttpGet("{id}/cart")]
+		public IEnumerable<Guid> GetOrderCartIds(Guid id)
+		{
+			return s_Carts.Where(c => c.OrderId == id).Select(c => c.ItemId);
+		}
+
+		[HttpGet("{orderId}/cart/{itemId}")]
+		public Cart GetOrderCartById(Guid orderId, Guid itemId)
+		{
+			return s_Carts.First(c => c.OrderId == orderId && c.ItemId == itemId);
+		}
+
+		[HttpDelete("{orderId}/cart/{itemId}")]
+		public void DeleteOrderCartById(Guid orderId, Guid itemId)
+		{
+			s_Carts = s_Carts.Where(c => c.OrderId != orderId && c.ItemId != itemId).ToList();
 		}
 	}
 }
