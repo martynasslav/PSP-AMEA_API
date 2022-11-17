@@ -60,5 +60,23 @@ namespace PSP_AMEA_API.Controllers
 		{
 			s_Carts = s_Carts.Where(c => c.OrderId != orderId && c.ItemId != itemId).ToList();
 		}
+
+		[HttpGet("{id}/Payment")]
+		public IEnumerable<Guid> GetOrderPaymentIds(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		[HttpGet("{orderId}/Payment/{paymentId}")]
+		public Payment GetOrderPaymentById(Guid orderId, Guid paymentId)
+		{
+			throw new NotImplementedException();
+		}
+
+		[HttpDelete("{orderId}/Payment/{paymentId}")]
+		public void DeleteOrderPaymentById(Guid orderId, Guid paymentId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
