@@ -28,11 +28,12 @@ namespace PSP_AMEA_API.Controllers
 		}
 
 		[HttpPut("{id}")]
-		public void EditItem(Guid id, [FromBody] Item item)
+		public Item EditItem(Guid id, [FromBody] Item item)
 		{
-			var items = s_items.Where(i => i.Id == id).ToList();
+			var idx = s_items.FindIndex(i => i.Id == id);
+			s_items[idx] = item;
 
-			items.ForEach(i => i = item);
+			return s_items[idx];
 		}
 
 		[HttpDelete("{id}")]
