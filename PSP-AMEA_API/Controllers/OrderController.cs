@@ -43,19 +43,19 @@ namespace PSP_AMEA_API.Controllers
 			s_Orders = s_Orders.Where(o => o.Id != id).ToList();
 		}
 
-		[HttpGet("{id}/cart")]
+		[HttpGet("{id}/Cart")]
 		public IEnumerable<Guid> GetOrderCartIds(Guid id)
 		{
 			return s_Carts.Where(c => c.OrderId == id).Select(c => c.ItemId);
 		}
 
-		[HttpGet("{orderId}/cart/{itemId}")]
+		[HttpGet("{orderId}/Cart/{itemId}")]
 		public Cart GetOrderCartById(Guid orderId, Guid itemId)
 		{
 			return s_Carts.First(c => c.OrderId == orderId && c.ItemId == itemId);
 		}
 
-		[HttpDelete("{orderId}/cart/{itemId}")]
+		[HttpDelete("{orderId}/Cart/{itemId}")]
 		public void DeleteOrderCartById(Guid orderId, Guid itemId)
 		{
 			s_Carts = s_Carts.Where(c => c.OrderId != orderId && c.ItemId != itemId).ToList();

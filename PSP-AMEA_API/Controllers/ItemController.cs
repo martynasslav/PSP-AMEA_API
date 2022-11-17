@@ -42,19 +42,19 @@ namespace PSP_AMEA_API.Controllers
 			s_items = s_items.Where(i => i.Id != id).ToList();
 		}
 
-		[HttpGet("{id}/review")]
+		[HttpGet("{id}/Review")]
 		public IEnumerable<Review> GetItemReviewIds(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		[HttpGet("{itemId}/review/{reviewId}")]
+		[HttpGet("{itemId}/Review/{reviewId}")]
 		public Review GetItemReviewById(Guid itemId, Guid reviewId)
 		{
 			throw new NotImplementedException();
 		}
 
-		[HttpDelete("{itemId}/review/{reviewId}")]
+		[HttpDelete("{itemId}/Review/{reviewId}")]
 		public void DeleteItemReview(Guid itemId, Guid reviewId)
 		{
 			throw new NotImplementedException();
