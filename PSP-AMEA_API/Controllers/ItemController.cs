@@ -7,30 +7,30 @@ namespace PSP_AMEA_API.Controllers
 	[ApiController]
 	public class ItemController : ControllerBase
 	{
-		private static List<Item> m_items = new List<Item>();
+		private static List<Item> s_items = new List<Item>();
 
 		[HttpGet]
 		public IEnumerable<Guid> GetItemIds()
 		{
-			return m_items.Select(i => i.Id);
+			return s_items.Select(i => i.Id);
 		}
 
 		[HttpPost]
 		public void CreateItem([FromBody] Item item)
 		{
-			m_items.Add(item);
+			s_items.Add(item);
 		}
 
 		[HttpGet("{id}")]
 		public Item GetItemById(Guid id)
 		{
-			return m_items.Where(i => i.Id == id).First();
+			return s_items.First(i => i.Id == id);
 		}
 
 		[HttpPut("{id}")]
 		public void EditItem(Guid id, [FromBody] Item item)
 		{
-			var items = m_items.Where(i => i.Id == id).ToList();
+			var items = s_items.Where(i => i.Id == id).ToList();
 
 			items.ForEach(i => i = item);
 		}
@@ -38,7 +38,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpDelete("{id}")]
 		public void DeleteItem(Guid id)
 		{
-			m_items = m_items.Where(i => i.Id != id).ToList();
+			s_items = s_items.Where(i => i.Id != id).ToList();
 		}
 
 		[HttpGet("{id}/review")]
