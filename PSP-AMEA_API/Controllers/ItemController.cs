@@ -3,7 +3,7 @@ using PSP_AMEA_API.DataModels;
 
 namespace PSP_AMEA_API.Controllers
 {
-	[Route("v1/item")]
+	[Route("v1/[controller]")]
 	[ApiController]
 	public class ItemController : ControllerBase
 	{
