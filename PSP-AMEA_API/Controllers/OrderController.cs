@@ -78,5 +78,23 @@ namespace PSP_AMEA_API.Controllers
 		{
 			throw new NotImplementedException();
 		}
+
+		[HttpGet("{id}/Delivery")]
+		public IEnumerable<Guid> GetOrderDeliveryIds(Guid id)
+		{
+			throw new NotImplementedException(); 
+		}
+
+		[HttpGet("{orderId}/Delivery/{deliveryId}")]
+		public Delivery GetOrderDeliveryById(Guid orderId, Guid deliveryId)
+		{
+			throw new NotImplementedException();
+		}
+
+		[HttpDelete("{orderId}/Delivery/{deliveryId}")]
+		public void DeleteOrderDeliveryById(Guid orderId, Guid deliveryId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
