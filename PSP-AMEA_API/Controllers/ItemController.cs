@@ -48,20 +48,8 @@ namespace PSP_AMEA_API.Controllers
 			throw new NotImplementedException();
 		}
 
-		[HttpPost("{id}/review")]
-		public void CreateItemReview(Guid id, [FromBody] Review review)
-		{
-			throw new NotImplementedException();
-		}
-
 		[HttpGet("{itemId}/review/{reviewId}")]
 		public Review GetItemReviewById(Guid itemId, Guid reviewId)
-		{
-			throw new NotImplementedException();
-		}
-
-		[HttpPut("{itemId}/review/{reviewId}")]
-		public Review EditItemReview(Guid itemId, Guid reviewId, [FromBody] Review review)
 		{
 			throw new NotImplementedException();
 		}
