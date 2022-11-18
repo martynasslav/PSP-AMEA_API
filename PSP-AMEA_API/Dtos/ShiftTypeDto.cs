@@ -1,6 +1,6 @@
-﻿namespace PSP_AMEA_API.DataModels
+﻿namespace PSP_AMEA_API.Dtos
 {
-    public class ShiftType
+    public class ShiftTypeDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = "Name";

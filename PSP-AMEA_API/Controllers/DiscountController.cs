@@ -52,7 +52,7 @@ namespace PSP_AMEA_API.Controllers
         }
 
         /// <summary>
-        /// Creates new discount.
+        /// Creates a new discount.
         /// </summary>
         /// <response code="201">Discount created.</response>
         [ProducesResponseType(201)]
@@ -98,7 +98,7 @@ namespace PSP_AMEA_API.Controllers
         }
 
         /// <summary>
-        /// Deletes discount.
+        /// Deletes a discount.
         /// </summary>
         /// <param name="id">Unique discount ID</param>
         /// <response code="200">Discount successfully deleted.</response>

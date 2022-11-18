@@ -14,6 +14,9 @@ class Program
 
 		builder.Services.AddSingleton<IDiscountRepository, DiscountRepository>();
 		builder.Services.AddSingleton<IDiscountItemRepository, DiscountItemRepository>();
+		builder.Services.AddSingleton<IShiftRepository, ShiftRepository>();
+		builder.Services.AddSingleton<IShiftTypeRepository, ShiftTypeRepository>();
+		builder.Services.AddSingleton<IShiftEmployeeRepository, ShiftEmployeeRepository>();
 		builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen(c => {

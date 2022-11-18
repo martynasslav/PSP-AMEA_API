@@ -7,7 +7,7 @@
         public Guid LoyaltyTierId { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTo { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = "Name";
         public int DiscountPercentage { get; set; }
         public int CashbackPercentage { get; set; }
         public int CashbackValidFor { get; set; }
