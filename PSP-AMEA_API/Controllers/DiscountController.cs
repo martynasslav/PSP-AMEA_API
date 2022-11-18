@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSP_AMEA_API.DataModels;
+using PSP_AMEA_API.Dtos;
+using PSP_AMEA_API.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,13 @@ namespace PSP_AMEA_API.Controllers
     [ApiController]
     public class DiscountController : ControllerBase
     {
+        private readonly IDiscountRepository _discountRepository;
+
+        public DiscountController(IDiscountRepository discountRepository)
+        {
+            _discountRepository = discountRepository;
+        }
+
         /// <summary>
         /// Gets information about all available discounts.
         /// </summary>
@@ -20,19 +29,26 @@ namespace PSP_AMEA_API.Controllers
         [HttpGet(Name = "GetDiscounts")]
         public IEnumerable<Discount> GetAllDiscounts()
         {
-            return _discounts;
+            return _discountRepository.GetAllDiscounts();
         }
 
         /// <summary>
-        /// Gets information about an discount from specified discount ID.
+        /// Gets information about a discount from specified discount ID.
         /// </summary>
         /// <param name="id">Unique discount ID</param>
         /// <response code="200">Discount information returned.</response>
         [ProducesResponseType(200)]
         [HttpGet("{id}", Name = "GetDiscount")]
-        public Discount? GetDiscount(Guid id)
+        public ActionResult<Discount> GetDiscount(Guid id)
         {
-            return _discounts.Find(d => d.Id == id);
+            var discount = _discountRepository.GetDiscountById(id);
+
+            if(discount == null)
+            {
+                return NotFound();
+            }
+
+            return discount;
         }
 
         /// <summary>
@@ -41,48 +57,21 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="201">Discount created.</response>
         [ProducesResponseType(201)]
         [HttpPost(Name = "CreateDiscount")]
-        public ActionResult<Discount> CreateDiscount(Discount discount)
+        public ActionResult<Discount> CreateDiscount(CreateDiscountDto dto)
         {
-            discount.Id = Guid.NewGuid();
-            discount.LoyaltyTierId = Guid.NewGuid();
-            discount.TenantId = Guid.NewGuid();
+            var discount = _discountRepository.CreateDiscount(dto);
 
-            _discounts.Add(discount);
-
-            return Ok(discount);
+            return CreatedAtAction("GetDiscount", new { id = discount.Id }, discount);
         }
 
         /// <summary>
-        /// Updates discount's percentage value.
+        /// Updates discount's information.
         /// </summary>
         /// <param name="id">Unique discount ID</param>
-        /// <param name="discountPercentage">New percentage value</param>
-        /// <response code="200">Discount percentage updated.</response>
+        /// <response code="200">Discount information updated.</response>
         [ProducesResponseType(200)]
-        [HttpPatch("{id}/DiscountPercentage", Name = "UpdateDiscountPercentage")]
-        public ActionResult<Discount> UpdateDiscountPercentage(Guid id, int discountPercentage)
-        {
-            var discount = GetDiscount(id);
-
-            if(discount == null)
-            {
-                return NotFound();
-            }
-
-            discount.DiscountPercentage = discountPercentage;
-            return Ok(discount);
-        }
-
-        /// <summary>
-        /// Updates discount's validation dates.
-        /// </summary>
-        /// <param name="id">Unique discount ID</param>
-        /// <param name="validFrom">New discount duration start</param>
-        /// <param name="validTo">New discount duration end</param>
-        /// <response code="200">Discount duration updated.</response>
-        [ProducesResponseType(200)]
-        [HttpPatch("{id}", Name = "UpdateDiscountDuration")]
-        public ActionResult<Discount> UpdateDiscountDuration(Guid id, DateTime validFrom, DateTime validTo)
+        [HttpPut("{id}", Name = "UpdateDiscount")]
+        public ActionResult<Discount> UpdateDiscount(Guid id, CreateDiscountDto dto)
         {
             var discount = GetDiscount(id);
 
@@ -90,14 +79,26 @@ namespace PSP_AMEA_API.Controllers
             {
                 return NotFound();
             }
+            Discount updatedDiscount = new()
+            {
+                Id = id,
+                IsLoyalty = dto.IsLoyalty,
+                ValidFrom = dto.ValidFrom,
+                ValidTo = dto.ValidTo,
+                Name = dto.Name,
+                DiscountPercentage = dto.DiscountPercentage,
+                CashbackPercentage = dto.CashbackPercentage,
+                CashbackValidFor = dto.CashbackValidFor,
+                TenantId = dto.TenantId
+            };
 
-            discount.ValidFrom = validFrom;
-            discount.ValidTo = validTo;
-            return Ok(discount);
+            _discountRepository.UpdateDiscount(updatedDiscount);
+
+            return Ok();
         }
 
         /// <summary>
-        /// Deletes a discount.
+        /// Deletes discount.
         /// </summary>
         /// <param name="id">Unique discount ID</param>
         /// <response code="200">Discount successfully deleted.</response>
@@ -105,44 +106,16 @@ namespace PSP_AMEA_API.Controllers
         [HttpDelete("{id}")]
         public ActionResult<Discount> DeleteDiscount(Guid id)
         {
-            var discount = GetDiscount(id);
+            var discount = _discountRepository.GetDiscountById(id);
 
-            if (discount == null) 
+            if (discount == null)
             {
                 return NotFound();
             }
 
-            _discounts.Remove(discount); 
+            _discountRepository.DeleteDiscount(discount);
+
             return Ok();
         }
-
-        private static List<Discount> _discounts = new()
-        {
-                new Discount()
-                {
-                    Id = Guid.NewGuid(),
-                    IsLoyalty = false,
-                    ValidFrom = DateTime.Today,
-                    ValidTo = DateTime.Today.AddDays(7),
-                    Name = "Discount1",
-                    DiscountPercentage = 15,
-                    CashbackPercentage = 0,
-                    CashbackValidFor = 0,
-                    TenantId = Guid.NewGuid()
-                },
-                new Discount()
-                {
-                    Id = Guid.NewGuid(),
-                    IsLoyalty = true,
-                    LoyaltyTierId = Guid.NewGuid(),
-                    ValidFrom = DateTime.Today,
-                    ValidTo = DateTime.Today.AddDays(14),
-                    Name = "Discount2",
-                    DiscountPercentage = 25,
-                    CashbackPercentage = 0,
-                    CashbackValidFor = 0,
-                    TenantId = Guid.NewGuid()
-                }
-            };
-        }
     }
+}

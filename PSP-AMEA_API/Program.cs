@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using PSP_AMEA_API.Repository;
 using System.Reflection;
 
 class Program
@@ -11,6 +12,8 @@ class Program
 	{
 		var builder = WebApplication.CreateBuilder();
 
+		builder.Services.AddSingleton<IDiscountRepository, DiscountRepository>();
+		builder.Services.AddSingleton<IDiscountItemRepository, DiscountItemRepository>();
 		builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen(c => {

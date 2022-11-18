@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSP_AMEA_API.DataModels;
+using PSP_AMEA_API.Dtos;
+using PSP_AMEA_API.Repository;
 
 namespace PSP_AMEA_API.Controllers
 {
@@ -7,40 +9,101 @@ namespace PSP_AMEA_API.Controllers
     [ApiController]
     public class DiscountItemController : ControllerBase
     {
+        private readonly IDiscountItemRepository _discountItemRepository;
+
+        public DiscountItemController(IDiscountItemRepository discountItemRepository)
+        {
+            _discountItemRepository = discountItemRepository;
+        }
+
         /// <summary>
-        /// Assign product a discount.
+        /// Gets information about all available discount items.
+        /// </summary>
+        /// <response code="200">Discount items information returned.</response>
+        [ProducesResponseType(200)]
+        [HttpGet(Name = "GetDiscountItems")]
+        public IEnumerable<DiscountItem> GetDiscountItems()
+        {
+            return _discountItemRepository.GetAllDiscountItems();
+        }
+
+        /// <summary>
+        /// Gets information about a discount item from specified discount ID.
+        /// </summary>
+        /// <param name="id">Unique discount ID</param>
+        /// <response code="200">Discount item information returned.</response>
+        [ProducesResponseType(200)]
+        [HttpGet("{id}", Name = "GetDiscountItemByDiscountId")]
+        public ActionResult<DiscountItem> GetDiscountItemByDiscountId(Guid id)
+        {
+            var discountItem = _discountItemRepository.GetDiscountItemByDiscountId(id);
+
+            if (discountItem == null)
+            {
+                return NotFound();
+            }
+
+            return discountItem;
+        }
+
+        /// <summary>
+        /// Assign product to a discount.
         /// </summary>
         /// <response code="201">Discount successfully assigned to item.</response>
         [ProducesResponseType(201)]
         [HttpPost(Name = "AssignDiscount")]
-        public ActionResult<DiscountItem> AssignDiscount(DiscountItem discountItem)
+        public ActionResult<DiscountItem> AssignDiscount(DiscountItemDto dto)
         {
-            discountItem.DisountId = Guid.NewGuid();
-            discountItem.ItemId = Guid.NewGuid();
+            var discountItem = _discountItemRepository.CreateDiscountItem(dto);
 
-            _discountItems.Add(discountItem);
-
-            return Ok(discountItem);
+            return CreatedAtAction("GetDiscountItemByDiscountId", new { id = discountItem.DisountId}, discountItem);
         }
 
         /// <summary>
-        /// See products and their discounts.
+        /// Updates discount item's information.
         /// </summary>
-        /// <response code="200">Information returned</response>
+        /// <param name="id">Unique discount ID</param>
+        /// <response code="200">Discount item's information updated.</response>
         [ProducesResponseType(200)]
-        [HttpGet(Name = "GetAllDiscountItems")]
-        public IEnumerable<DiscountItem> GetAllDiscountItems()
+        [HttpPut("{id}", Name = "UpdateDiscountItem")]
+        public ActionResult<DiscountItem> UpdateDiscountItem(Guid id, UpdateDiscountItemDto dto)
         {
-            return _discountItems;
+            var discountItem = _discountItemRepository.GetDiscountItemByDiscountId(id);
+
+            if (discountItem == null)
+            {
+                return NotFound();
+            }
+            DiscountItem updatedDiscountItem = new()
+            {
+                DisountId = id,
+                ItemId = dto.ItemId
+            };
+
+            _discountItemRepository.UpdateDiscountItem(updatedDiscountItem);
+
+            return Ok();
         }
 
-        private static List<DiscountItem> _discountItems = new()
+        /// <summary>
+        /// Deletes a discount item.
+        /// </summary>
+        /// <param name="id">Unique discount ID</param>
+        /// <response code="200">Discount item successfully deleted.</response>
+        [ProducesResponseType(200)]
+        [HttpDelete("{id}")]
+        public ActionResult<DiscountItem> DeleteDiscountItem(Guid id)
         {
-            new DiscountItem
+            var discountItem = _discountItemRepository.GetDiscountItemByDiscountId(id);
+
+            if (discountItem == null)
             {
-                DisountId = Guid.NewGuid(),
-                ItemId = Guid.NewGuid()
+                return NotFound();
             }
-        };
+
+            _discountItemRepository.DeleteDiscountItem(discountItem);
+
+            return Ok();
+        }
     }
 }
