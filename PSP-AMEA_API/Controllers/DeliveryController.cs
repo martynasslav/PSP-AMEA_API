@@ -16,6 +16,15 @@ namespace PSP_AMEA_API.Controllers
 			this._deliveryRepository = deliveryRepository;
 		}
 
+		/// <summary>
+		/// Gets information about order delivery from unique identifier.
+		/// </summary>
+		/// <param name="id">Unique delivery information identifier</param>
+		/// <returns></returns>
+		/// <response code="200">Information about order delivery was returned.</response>
+		/// <response code="204">Delivery information with specified identifier was not found.</response>
+		[ProducesResponseType(200)]
+		[ProducesResponseType(204)]
 		[HttpGet("{id}")]
 		public ActionResult<Delivery> GetDelivery(Guid id)
 		{
@@ -24,6 +33,16 @@ namespace PSP_AMEA_API.Controllers
 			return delivery == null ? NoContent() : Ok(delivery);
 		}
 
+		/// <summary>
+		/// Replaces existing order delivery information.
+		/// </summary>
+		/// <param name="id">Unique delivery information identifier</param>
+		/// <param name="deliveryDto">New order delivery information</param>
+		/// <returns></returns>
+		/// <response code="200">Information about delivery was replaced and new information sent back.</response>
+		/// <response code="404">Information with specified identifier does not exist.</response>
+		[ProducesResponseType(200)]
+		[ProducesResponseType(204)] 
 		[HttpPut("{id}")]
 		public ActionResult<Delivery> EditDelivery(Guid id, [FromBody] DeliveryEditDto deliveryDto)
 		{
@@ -40,6 +59,15 @@ namespace PSP_AMEA_API.Controllers
 			return delivery;
 		}
 
+		/// <summary>
+		/// Deletes existing information about order delivery.
+		/// </summary>
+		/// <param name="id">Unique delivery information identifier</param>
+		/// <returns></returns>
+		/// <response code="200">Information was deleted successfully.</response>
+		/// <response code="404">Information with specified identifier does not exist.</response>
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
 		[HttpDelete("{id}")]
 		public ActionResult DeleteDelivery(Guid id)
 		{

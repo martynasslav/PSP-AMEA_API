@@ -16,6 +16,15 @@ namespace PSP_AMEA_API.Controllers
 			this._paymentRepository = paymentRepository;
 		}
 
+		/// <summary>
+		/// Gets order payment information.
+		/// </summary>
+		/// <param name="id">Unique payment identifier</param>
+		/// <returns></returns>
+		/// <response code="200">Information about order payment was returned.</response>
+		/// <response code="204">Payment information was not found.</response>
+		[ProducesResponseType(200)]
+		[ProducesResponseType(204)]
 		[HttpGet("{id}")]
 		public ActionResult<Payment> GetPayment(Guid id)
 		{
@@ -24,6 +33,15 @@ namespace PSP_AMEA_API.Controllers
 			return payment == null ? NoContent() : Ok(payment);
 		}
 
+		/// <summary>
+		/// Replaces existing payment information.
+		/// </summary>
+		/// <param name="id">Unique payment identifier</param>
+		/// <returns></returns>
+		/// <response code="200">Information about order payment was replaced and returned.</response>
+		/// <response code="404">Payment information was not found.</response>
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
 		[HttpPut("{id}")]
 		public ActionResult<Payment> EditPayment(Guid id, [FromBody] PaymentEditDto paymentDto)
 		{
@@ -39,6 +57,15 @@ namespace PSP_AMEA_API.Controllers
 			return Ok(payment);
 		}
 
+		/// <summary>
+		/// Deletes existing payment information.
+		/// </summary>
+		/// <param name="id">Unique payment identifier</param>
+		/// <returns></returns>
+		/// <response code="200">Information about order payment was deleted successfully.</response>
+		/// <response code="404">Payment information was not found.</response>
+		[ProducesResponseType(200)]
+		[ProducesResponseType(404)]
 		[HttpDelete("{id}")]
 		public ActionResult DeletePayment(Guid id)
 		{
