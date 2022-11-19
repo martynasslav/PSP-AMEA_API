@@ -1,0 +1,108 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using PSP_AMEA_API.DataModels;
+using PSP_AMEA_API.Dtos;
+using PSP_AMEA_API.Repository;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PSP_AMEA_API.Controllers
+{
+    [Route("v1/[controller]")]
+    [ApiController]
+    public class InvoiceController : ControllerBase
+    {
+        private readonly IInvoiceRepository _invoiceRepository;
+
+        public InvoiceController(IInvoiceRepository invoiceRepository)
+        {
+            _invoiceRepository = invoiceRepository;
+        }
+
+        /// <summary>
+        /// Gets information about all available invoices.
+        /// </summary>
+        /// <response code="200">Invoices information returned.</response>
+        [ProducesResponseType(200)]
+        [HttpGet(Name = "GetInvoices")]
+        public IEnumerable<Invoice> GetAllInvoices()
+        {
+            return _invoiceRepository.GetAllInvoices();
+        }
+
+        /// <summary>
+        /// Gets information about an invoice from specified location ID.
+        /// </summary>
+        /// <param name="id">Unique invoice ID</param>
+        /// <response code="200">Invoice information returned.</response>
+        [ProducesResponseType(200)]
+        [HttpGet("{id}", Name = "GetInvoice")]
+        public ActionResult<Invoice> GetInvoice(Guid id)
+        {
+            var invoice = _invoiceRepository.GetInvoiceById(id);
+            if (invoice == null)
+            {
+                return NotFound();
+            }
+            return invoice;
+        }
+
+        /// <summary>
+        /// Creates a new invoice.
+        /// </summary>
+        /// <response code="201">invoice created.</response>
+        [ProducesResponseType(201)]
+        [HttpPost(Name = "CreateInvoice")]
+        public ActionResult<Invoice> CreateInvoice(CreateInvoiceDto dto)
+        {
+            var invoice = _invoiceRepository.CreateInvoice(dto);
+            return CreatedAtAction("GetInvoice", new { id = invoice.Id }, invoice);
+        }
+
+        /// <summary>
+        /// Updates invoice's information.
+        /// </summary>
+        /// <param name="id">Unique invoice ID</param>
+        /// <response code="200">Invoice information updated.</response>
+        [ProducesResponseType(200)]
+        [HttpPut("{id}", Name = "UpdateInvoice")]
+        public ActionResult<Invoice> UpdateInvoice(Guid id, CreateInvoiceDto dto)
+        {
+            var invoice = GetInvoice(id);
+
+            if (invoice == null)
+            {
+                return NotFound();
+            }
+            Invoice updatedInvoice = new()
+            {Id = id, OrderId = dto.OrderId, VATCode = dto.VATCode, Address = dto.Address, CreatedAt = dto.CreatedAt, DueTo = dto.DueTo, Amount = dto.Amount, Name = dto.Name, TenantId = dto.TenantId};
+
+            _invoiceRepository.UpdateInvoice(updatedInvoice);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Deletes an invoice.
+        /// </summary>
+        /// <param name="id">Unique invoice ID</param>
+        /// <response code="200">Invoice successfully deleted.</response>
+        [ProducesResponseType(200)]
+        [HttpDelete("{id}")]
+        public ActionResult<Invoice> DeleteInvoice(Guid id)
+        {
+            var invoice = _invoiceRepository.GetInvoiceById(id);
+
+            if (invoice == null)
+            {
+                return NotFound();
+            }
+
+            _invoiceRepository.DeleteInvoice(invoice);
+
+            return Ok();
+        }
+    }
+}
