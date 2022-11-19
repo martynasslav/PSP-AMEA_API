@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PSP_AMEA_API.DataModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace PSP_AMEA_API.Dtos
 {
+
     public class CreateDiscountDto
     {
         [Required]
@@ -15,9 +17,9 @@ namespace PSP_AMEA_API.Dtos
         [Required]
         public string Name { get; set; } = "Name";
         [Required]
-        public int DiscountPercentage { get; set; }
+        public DiscountStatus Measure { get; set; }
         [Required]
-        public int CashbackPercentage { get; set; }
+        public int Amount { get; set; }
         [Required]
         public int CashbackValidFor { get; set; }
         [Required]

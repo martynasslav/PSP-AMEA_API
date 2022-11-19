@@ -37,7 +37,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique discount ID</param>
         /// <response code="200">Discount information returned.</response>
+        /// <response code="204">Discount information not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [HttpGet("{id}", Name = "GetDiscount")]
         public ActionResult<Discount> GetDiscount(Guid id)
         {
@@ -45,7 +47,7 @@ namespace PSP_AMEA_API.Controllers
 
             if(discount == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return discount;
@@ -68,17 +70,20 @@ namespace PSP_AMEA_API.Controllers
         /// Updates discount's information.
         /// </summary>
         /// <param name="id">Unique discount ID</param>
-        /// <response code="200">Discount information updated.</response>
+        /// <response code="200">Updated discount information updated.</response>
+        /// <response code="404">There is no such discount.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpPut("{id}", Name = "UpdateDiscount")]
         public ActionResult<Discount> UpdateDiscount(Guid id, CreateDiscountDto dto)
         {
-            var discount = GetDiscount(id);
+            var discount = _discountRepository.GetDiscountById(id); ;
 
             if (discount == null)
             {
                 return NotFound();
             }
+
             Discount updatedDiscount = new()
             {
                 Id = id,
@@ -86,8 +91,8 @@ namespace PSP_AMEA_API.Controllers
                 ValidFrom = dto.ValidFrom,
                 ValidTo = dto.ValidTo,
                 Name = dto.Name,
-                DiscountPercentage = dto.DiscountPercentage,
-                CashbackPercentage = dto.CashbackPercentage,
+                Measure = dto.Measure,
+                Amount = dto.Amount,
                 CashbackValidFor = dto.CashbackValidFor,
                 TenantId = dto.TenantId
             };
@@ -102,7 +107,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique discount ID</param>
         /// <response code="200">Discount successfully deleted.</response>
+        /// <response code="404">There is no such discount.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpDelete("{id}")]
         public ActionResult<Discount> DeleteDiscount(Guid id)
         {

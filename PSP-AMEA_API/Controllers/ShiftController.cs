@@ -32,7 +32,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique shift ID</param>
         /// <response code="200">Shift information returned</response>
+        /// <response code="204">Shift information not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [HttpGet("{id}", Name = "GetShift")]
         public ActionResult<Shift> GetShift(Guid id)
         {
@@ -40,7 +42,7 @@ namespace PSP_AMEA_API.Controllers
 
             if (shift == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return shift;
@@ -64,13 +66,15 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique shift ID</param>
         /// <response code="200">Shift information updated</response>
+        /// <response code="404">There is no such shift.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpPut("{id}", Name = "UpdateShift")]
         public ActionResult<Shift> UpdateShift(Guid id, CreateShiftDto dto)
         {
-            var shift = GetShift(id);
+            var shift = _shiftRepository.GetShiftById(id);
 
-            if(shift == null)
+            if (shift == null)
             {
                 return NotFound();
             }
@@ -96,7 +100,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unqiue shift ID</param>
         /// <response code="200">Shift successfully deleted</response>
+        /// <response code="404">There is no such shift.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpDelete("{id}")]
         public ActionResult<Shift> DeleteShift(Guid id)
         {

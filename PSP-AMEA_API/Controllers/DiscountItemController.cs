@@ -32,7 +32,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique discount ID</param>
         /// <response code="200">Discount item information returned.</response>
+        /// <response code="404">Discount item not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpGet("{id}", Name = "GetDiscountItemByDiscountId")]
         public ActionResult<DiscountItem> GetDiscountItemByDiscountId(Guid id)
         {
@@ -40,7 +42,7 @@ namespace PSP_AMEA_API.Controllers
 
             if (discountItem == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return discountItem;
@@ -64,7 +66,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique discount ID</param>
         /// <response code="200">Discount item's information updated.</response>
+        /// <response code="404">Discount item not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpPut("{id}", Name = "UpdateDiscountItem")]
         public ActionResult<DiscountItem> UpdateDiscountItem(Guid id, UpdateDiscountItemDto dto)
         {
@@ -90,7 +94,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique discount ID</param>
         /// <response code="200">Discount item successfully deleted.</response>
+        /// <response code="404">Discount item not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpDelete("{id}")]
         public ActionResult<DiscountItem> DeleteDiscountItem(Guid id)
         {

@@ -33,7 +33,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unqiue shift ID</param>
         /// <response code="200">Shift employee information returned</response>
+        /// <response code="204">Shift employee not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [HttpGet("{id}",Name = "GetShiftEmployeeByShiftId")]
         public ActionResult<ShiftEmployee> GetShiftEmployeeByShiftId(Guid id)
         {
@@ -41,7 +43,7 @@ namespace PSP_AMEA_API.Controllers
 
             if(shiftEmployee == null) 
             {
-                return NotFound();
+                return NoContent();
             }
 
             return shiftEmployee;
@@ -51,7 +53,7 @@ namespace PSP_AMEA_API.Controllers
         /// Create a shift employee.
         /// </summary>
         /// <param name="id"></param>
-        /// <response code="200">Shift employee created</response>
+        /// <response code="201">Shift employee created</response>
         [ProducesResponseType(201)]
         [HttpPost(Name = "AssignShiftEmployee")]
         public ActionResult<ShiftEmployee> AssignShiftEmployee(ShiftEmployeeDto dto)
@@ -66,7 +68,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unqiue shift ID</param>
         /// <response code="200">Shift employee updated</response>
+        /// <response code="404">There is no such shift with this employee.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpPut("{id}", Name = "UpdateShiftEmployee")]
         public ActionResult<ShiftEmployee> UpdateShiftEmployee(Guid id, UpdateShiftEmployeeDto dto)
         {
@@ -93,7 +97,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unqiue shift ID</param>
         /// <response code="200">Shift employee successfully deleted</response>
+        /// <response code="404">There is no such shift with this employee.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpDelete("{id}")]
         public ActionResult<ShiftEmployee> DeleteShiftEmployee(Guid id)
         {

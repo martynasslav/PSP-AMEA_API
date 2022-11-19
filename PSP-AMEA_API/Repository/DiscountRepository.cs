@@ -13,9 +13,9 @@ namespace PSP_AMEA_API.Repository
                 IsLoyalty = false,
                 ValidFrom = DateTime.Today,
                 ValidTo = DateTime.Today.AddDays(7),
-                Name = "Discount1",
-                DiscountPercentage = 15,
-                CashbackPercentage = 0,
+                Name = "PercentageDiscount",
+                Measure = DataModels.DiscountStatus.Percentage,
+                Amount = 15,
                 CashbackValidFor = 0,
                 TenantId = Guid.NewGuid()
             },
@@ -26,10 +26,9 @@ namespace PSP_AMEA_API.Repository
                 LoyaltyTierId = Guid.NewGuid(),
                 ValidFrom = DateTime.Today,
                 ValidTo = DateTime.Today.AddDays(14),
-                Name = "Discount2",
-                DiscountPercentage = 25,
-                CashbackPercentage = 0,
-                CashbackValidFor = 0,
+                Name = "CashbackDiscount",
+                Measure = DataModels.DiscountStatus.Cashback,
+                CashbackValidFor = 5,
                 TenantId = Guid.NewGuid()
             }
         };
@@ -43,8 +42,8 @@ namespace PSP_AMEA_API.Repository
                 ValidFrom = dto.ValidFrom,
                 ValidTo = dto.ValidTo,
                 Name = dto.Name,
-                DiscountPercentage = dto.DiscountPercentage,
-                CashbackPercentage = dto.CashbackPercentage,
+                Measure = dto.Measure,
+                Amount = dto.Amount,
                 CashbackValidFor = dto.CashbackValidFor,
                 TenantId = dto.TenantId
             };

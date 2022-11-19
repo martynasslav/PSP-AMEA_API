@@ -32,7 +32,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique shift type ID</param>
         /// <response code="200">Shift type information returned</response>
+        /// <response code="204">Shift type information not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [HttpGet("{id}", Name = "GetShiftType")]
         public ActionResult<ShiftType> GetShiftType(Guid id)
         {
@@ -40,7 +42,7 @@ namespace PSP_AMEA_API.Controllers
 
             if (shiftType == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return shiftType;
@@ -64,11 +66,13 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique shift type ID</param>
         /// <response code="200">Shift type information updated</response>
+        /// <response code="404">There is no such shift type.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpPut("{id}", Name = "UpdateShiftType")]
         public ActionResult<ShiftType> UpdateShift(Guid id, CreateShiftTypeDto dto)
         {
-            var shiftType = GetShiftType(id);
+            var shiftType = _shiftTypeRepository.GetShiftTypeById(id);
 
             if (shiftType == null)
             {
@@ -91,8 +95,10 @@ namespace PSP_AMEA_API.Controllers
         /// Deletes a shift type.
         /// </summary>
         /// <param name="id">Unqiue shift type ID</param>
-        /// <returns></returns>
+        /// <response code="200">Shift type deleted.</response>
+        /// <response code="404">There is no such shift type.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpDelete("{id}")]
         public ActionResult<ShiftType> DeleteShiftType(Guid id)
         {
