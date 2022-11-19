@@ -37,7 +37,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique location ID</param>
         /// <response code="200">Location information returned.</response>
+        /// <response code="204">Location with specified ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [HttpGet("{id}", Name = "GetLocation")]
         public ActionResult<Location> GetLocation(Guid id)
         {
@@ -45,7 +47,7 @@ namespace PSP_AMEA_API.Controllers
 
             if (location == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return location;
@@ -68,7 +70,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique location ID</param>
         /// <response code="200">Location information updated.</response>
+        /// <response code="404">Location with specified ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpPut("{id}", Name = "UpdateLocation")]
         public ActionResult<Location> UpdateLocation(Guid id, CreateLocationDto dto)
         {
@@ -91,7 +95,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique location ID</param>
         /// <response code="200">Location successfully deleted.</response>
+        /// <response code="404">Location with specified ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpDelete("{id}")]
         public ActionResult<Location> DeleteLocation(Guid id)
         {

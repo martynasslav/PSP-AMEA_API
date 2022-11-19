@@ -37,7 +37,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique tenant ID</param>
         /// <response code="200">Tenant information returned.</response>
+        /// <response code="204">Tenant with specified ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [HttpGet("{id}", Name = "GetTenant")]
         public ActionResult<Tenant> GetTenant(Guid id)
         {
@@ -45,7 +47,7 @@ namespace PSP_AMEA_API.Controllers
 
             if (tenant == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return tenant;
@@ -68,7 +70,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique tenant ID</param>
         /// <response code="200">Tenant information updated.</response>
+        /// <response code="404">Tenant with specified ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpPut("{id}", Name = "UpdateTenant")]
         public ActionResult<Tenant> UpdateTenant(Guid id, CreateTenantDto dto)
         {
@@ -91,7 +95,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique tenant ID</param>
         /// <response code="200">Tenant successfully deleted.</response>
+        /// <response code="404">Tenant with specified ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpDelete("{id}")]
         public ActionResult<Tenant> DeleteTenant(Guid id)
         {

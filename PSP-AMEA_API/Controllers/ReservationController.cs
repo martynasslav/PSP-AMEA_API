@@ -33,11 +33,13 @@ namespace PSP_AMEA_API.Controllers
         }
 
         /// <summary>
-        /// Gets information about a reservation from specified location ID.
+        /// Gets information about a reservation from specified Order ID.
         /// </summary>
         /// <param name="id">Unique reservation ID</param>
         /// <response code="200">Reservation information returned.</response>
+        /// <response code="204">Reservation with specified Order ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [HttpGet("{id}", Name = "GetReservation")]
         public ActionResult<Reservation> GetReservation(Guid id)
         {
@@ -45,7 +47,7 @@ namespace PSP_AMEA_API.Controllers
 
             if (reservation == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return reservation;
@@ -54,7 +56,7 @@ namespace PSP_AMEA_API.Controllers
         /// <summary>
         /// Creates a new reservation.
         /// </summary>
-        /// <response code="201">reservation created.</response>
+        /// <response code="201">Reservation created.</response>
         [ProducesResponseType(201)]
         [HttpPost(Name = "CreateReservation")]
         public ActionResult<Reservation> CreateReservation(ReservationDto dto)
@@ -68,7 +70,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique Order ID</param>
         /// <response code="200">Reservation information updated.</response>
+        /// <response code="404">Reservation with specified Order ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpPut("{id}", Name = "UpdateReservation")]
         public ActionResult<Reservation> UpdateReservation(Guid id, ReservationDto dto)
         {
@@ -90,8 +94,10 @@ namespace PSP_AMEA_API.Controllers
         /// Cancel a reservation.
         /// </summary>
         /// <param name="id">Unique order ID</param>
-        /// <response code="200">Invoice successfully cancelled.</response>
+        /// <response code="200">Reservation successfully cancelled.</response>
+        /// <response code="404">Reservation with specified Order ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpDelete("{id}")]
         public ActionResult<Reservation> DeleteReservation(Guid id)
         {

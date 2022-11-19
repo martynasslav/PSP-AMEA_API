@@ -33,18 +33,20 @@ namespace PSP_AMEA_API.Controllers
         }
 
         /// <summary>
-        /// Gets information about an invoice from specified location ID.
+        /// Gets information about an invoice from specified Invoice ID.
         /// </summary>
         /// <param name="id">Unique invoice ID</param>
         /// <response code="200">Invoice information returned.</response>
+        /// <response code="204">Invoice with specified ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         [HttpGet("{id}", Name = "GetInvoice")]
         public ActionResult<Invoice> GetInvoice(Guid id)
         {
             var invoice = _invoiceRepository.GetInvoiceById(id);
             if (invoice == null)
             {
-                return NotFound();
+                return NoContent();
             }
             return invoice;
         }
@@ -66,7 +68,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique invoice ID</param>
         /// <response code="200">Invoice information updated.</response>
+        /// <response code="404">Invoice with specified ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpPut("{id}", Name = "UpdateInvoice")]
         public ActionResult<Invoice> UpdateInvoice(Guid id, CreateInvoiceDto dto)
         {
@@ -89,7 +93,9 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <param name="id">Unique invoice ID</param>
         /// <response code="200">Invoice successfully deleted.</response>
+        /// <response code="404">Invoice with specified ID not found.</response>
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [HttpDelete("{id}")]
         public ActionResult<Invoice> DeleteInvoice(Guid id)
         {
