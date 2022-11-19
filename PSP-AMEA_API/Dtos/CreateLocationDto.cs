@@ -9,8 +9,8 @@ namespace PSP_AMEA_API.Dtos
         [Required]
         public string Address { get; set; } = "Address";
         [Required]
-        public TimeOnly WorkingFrom { get; set; }
+        public DateTime WorkingFrom { get; set; }
         [Required]
-        public TimeOnly WorkingTo { get; set; }
+        public DateTime WorkingTo { get; set; }
     }
 }

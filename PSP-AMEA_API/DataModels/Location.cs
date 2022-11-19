@@ -11,7 +11,7 @@ namespace PSP_AMEA_API.DataModels
         public Guid Id { get; set; }
         public Guid TenantId { get; set; }
         public string Address { get; set; } = "Address";
-        public TimeOnly WorkingFrom { get; set; }
-        public TimeOnly WorkingTo { get; set; }
+        public DateTime WorkingFrom { get; set; }
+        public DateTime WorkingTo { get; set; }
     }
 }

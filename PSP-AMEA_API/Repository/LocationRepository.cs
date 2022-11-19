@@ -7,9 +7,9 @@ namespace PSP_AMEA_API.Repository
     {
         private readonly List<Location> locations = new()
         {
-            new Location() {Id = Guid.NewGuid(), Address = "Location1", WorkingFrom = TimeOnly.MinValue, WorkingTo = TimeOnly.MaxValue},
-            new Location() {Id = Guid.NewGuid(), Address = "Location2", WorkingFrom = TimeOnly.MinValue, WorkingTo = TimeOnly.MaxValue},
-            new Location() {Id = Guid.NewGuid(), Address = "Location3", WorkingFrom = TimeOnly.MinValue, WorkingTo = TimeOnly.MaxValue}
+            new Location() {Id = Guid.NewGuid(), Address = "Location1", WorkingFrom = DateTime.Now, WorkingTo = DateTime.Now.AddHours(8)},
+            new Location() {Id = Guid.NewGuid(), Address = "Location2", WorkingFrom = DateTime.Now, WorkingTo = DateTime.Now.AddHours(10)},
+            new Location() {Id = Guid.NewGuid(), Address = "Location3", WorkingFrom = DateTime.Now, WorkingTo = DateTime.Now.AddHours(12)}
         };
 
         public Location CreateLocation(CreateLocationDto dto)
