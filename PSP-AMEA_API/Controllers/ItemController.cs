@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSP_AMEA_API.DataModels;
+using PSP_AMEA_API.Dtos;
+using PSP_AMEA_API.Repository;
 
 namespace PSP_AMEA_API.Controllers
 {
@@ -7,57 +9,92 @@ namespace PSP_AMEA_API.Controllers
 	[ApiController]
 	public class ItemController : ControllerBase
 	{
-		private static List<Item> s_items = new List<Item>();
-
-		[HttpGet]
-		public IEnumerable<Guid> GetItemIds()
-		{
-			return s_items.Select(i => i.Id);
-		}
-
-		[HttpPost]
-		public void CreateItem([FromBody] Item item)
-		{
-			s_items.Add(item);
-		}
+		private readonly IItemRepository itemRepository = new ItemRepository();
+		private readonly IReviewRepository reviewRepository = new ReviewRepository();
 
 		[HttpGet("{id}")]
-		public Item GetItemById(Guid id)
+		public ActionResult<Item> GetItem(Guid id)
 		{
-			return s_items.First(i => i.Id == id);
+			return Ok(itemRepository.GetItem(id));
 		}
 
 		[HttpPut("{id}")]
-		public Item EditItem(Guid id, [FromBody] Item item)
+		public ActionResult<Item> EditItem(Guid id, [FromBody] ItemEditDto itemDto)
 		{
-			var idx = s_items.FindIndex(i => i.Id == id);
-			s_items[idx] = item;
+			var item = new Item() {
+				Id = id,
+				Title = itemDto.Title,
+				Category = itemDto.Category,
+				Price = itemDto.Price,
+				Description = itemDto.Description,
+				Brand = itemDto.Brand,
+				Photo = itemDto.Photo,
+				TenantId = itemDto.TenantId
+			};
 
-			return s_items[idx];
+			itemRepository.UpdateItem(item);
+
+			return Ok(item);
 		}
 
 		[HttpDelete("{id}")]
-		public void DeleteItem(Guid id)
+		public ActionResult DeleteItem(Guid id)
 		{
-			s_items = s_items.Where(i => i.Id != id).ToList();
+			itemRepository.DeleteItem(id);
+
+			return Ok();
 		}
 
 		[HttpGet("{id}/Review")]
-		public IEnumerable<Review> GetItemReviewIds(Guid id)
+		public ActionResult<IEnumerable<Review>> GetItemReviewIds(Guid id)
 		{
-			throw new NotImplementedException();
+			return Ok(reviewRepository.GetItemReviews(id));
 		}
 
-		[HttpGet("{itemId}/Review/{reviewId}")]
-		public Review GetItemReviewById(Guid itemId, Guid reviewId)
+		[HttpPost("{id}/Review")]
+		public ActionResult<Review> CreateItemReview(Guid id, [FromBody] ReviewCreationDto reviewDto)
 		{
-			throw new NotImplementedException();
+			var review = new Review() {
+				Description = reviewDto.Description,
+				Rating = reviewDto.Rating,
+				Photo = reviewDto.Photo,
+				ItemId = id,
+				UserId = reviewDto.UserId
+			};
+
+			reviewRepository.CreateReview(review);
+
+			return Ok(review);
 		}
 
-		[HttpDelete("{itemId}/Review/{reviewId}")]
-		public void DeleteItemReview(Guid itemId, Guid reviewId)
+		[HttpGet("{itemId}/Review/{userId}")]
+		public ActionResult<Review> GetItemReview(Guid itemId, Guid userId)
 		{
-			throw new NotImplementedException();
+			return Ok(reviewRepository.GetReview(itemId, userId));
+		}
+
+		[HttpPut("{itemId}/Review/{userId}")]
+		public ActionResult<Review> EditItemReview(Guid itemId, Guid userId, [FromBody] ReviewEditDto reviewDto)
+		{
+			var review = new Review() {
+				Description = reviewDto.Description,
+				Rating = reviewDto.Rating,
+				Photo = reviewDto.Photo,
+				ItemId = itemId,
+				UserId = userId
+			};
+
+			reviewRepository.UpdateReview(review);
+
+			return Ok(review);
+		}
+
+		[HttpDelete("{itemId}/Review/{userId}")]
+		public ActionResult DeleteItemReview(Guid itemId, Guid userId)
+		{
+			reviewRepository.DeleteReview(itemId, userId);
+
+			return Ok();
 		}
 	}
 }

@@ -1,10 +1,14 @@
-﻿namespace PSP_AMEA_API.DataModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PSP_AMEA_API.Dtos
 {
-	public class Payment
+	public class PaymentEditDto
 	{
-		public Guid Id { get; set; }
+		[Required]
 		public Guid OrderId { get; set; }
+		[Required]
 		public string Provider { get; set; } = "Provider";
+		[Required]
 		public string Status { get; set; } = "Status";
 	}
 }

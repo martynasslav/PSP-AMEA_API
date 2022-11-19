@@ -1,11 +1,16 @@
-﻿namespace PSP_AMEA_API.DataModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PSP_AMEA_API.Dtos
 {
-	public class Review
+	public class ReviewCreationDto
 	{
+		[Required]
 		public string Description { get; set; } = string.Empty;
+		[Required]
 		public int Rating { get; set; }
+		[Required]
 		public string Photo { get; set; } = string.Empty;
-		public Guid ItemId { get; set; }
+		[Required]
 		public Guid UserId { get; set; }
 	}
 }

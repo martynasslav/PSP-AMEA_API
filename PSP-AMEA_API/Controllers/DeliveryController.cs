@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSP_AMEA_API.DataModels;
+using PSP_AMEA_API.Dtos;
+using PSP_AMEA_API.Repository;
 
 namespace PSP_AMEA_API.Controllers
 {
@@ -7,16 +9,36 @@ namespace PSP_AMEA_API.Controllers
 	[ApiController]
 	public class DeliveryController : ControllerBase
 	{
-		[HttpPost]
-		public Delivery CreateDelivery([FromBody] Delivery delivery)
+		private readonly IDeliveryRepository deliveryRepository = new DeliveryRepository();
+
+		[HttpGet("{id}")]
+		public ActionResult<Delivery> GetDelivery(Guid id)
 		{
-			throw new NotImplementedException();
+			return Ok(deliveryRepository.GetDelivery(id));
 		}
 
-		[HttpPut]
-		public Delivery EditDelivery([FromBody] Delivery delivery)
+		[HttpPut("{id}")]
+		public ActionResult<Delivery> EditDelivery(Guid id, [FromBody] DeliveryEditDto deliveryDto)
 		{
-			throw new NotImplementedException();
+			var delivery = new Delivery() {
+				Id = id,
+				OrderId = deliveryDto.OrderId,
+				Address = deliveryDto.Address,
+				PostCode = deliveryDto.PostCode,
+				Details = deliveryDto.Details
+			};
+
+			deliveryRepository.UpdateDelivery(delivery);
+
+			return delivery;
+		}
+
+		[HttpDelete("{id}")]
+		public ActionResult DeleteDelivery(Guid id)
+		{
+			deliveryRepository.DeleteDelivery(id);
+
+			return Ok();
 		}
 	}
 }

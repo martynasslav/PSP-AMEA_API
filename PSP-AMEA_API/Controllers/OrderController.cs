@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PSP_AMEA_API.DataModels;
+using PSP_AMEA_API.Dtos;
+using PSP_AMEA_API.Repository;
 
 namespace PSP_AMEA_API.Controllers
 {
@@ -7,94 +9,162 @@ namespace PSP_AMEA_API.Controllers
 	[ApiController]
 	public class OrderController : ControllerBase
 	{
-		private static List<Order> s_Orders = new List<Order>();
-		private static List<Cart> s_Carts = new List<Cart>();
+		private readonly IOrderRepository orderRepository = new OrderRepository();
+		private readonly ICartRepository cartRepository = new CartRepository();
+		private readonly IPaymentRepository paymentRepository = new PaymentRepository();
+		private readonly IDeliveryRepository deliveryRepository = new DeliveryRepository();
 
 		[HttpGet]
-		public IEnumerable<Guid> GetOrderIds()
+		public ActionResult<IEnumerable<Guid>> GetOrderIds()
 		{
-			return s_Orders.Select(o => o.Id);
+			return Ok(orderRepository.GetOrderIds());
 		}
 
 		[HttpPost]
-		public void CreateOrder([FromBody] Order order)
+		public ActionResult<Order> CreateOrder([FromBody] OrderDto orderDto)
 		{
-			s_Orders.Add(order);
+			var order = new Order() {
+				Id = Guid.NewGuid(),
+				CustomerId = orderDto.CustomerId,
+				EmployeeId = orderDto.EmployeeId,
+				TenantId = orderDto.TenantId,
+				Total = orderDto.Total,
+				Tip = orderDto.Tip,
+				DeliveryType = orderDto.DeliveryType,
+				Date = orderDto.Date
+			};
+
+			orderRepository.CreateOrder(order);
+
+			return Ok(order);
 		}
 
 		[HttpGet("{id}")]
-		public Order GetOrderById(Guid id)
+		public ActionResult<Order> GetOrder(Guid id)
 		{
-			return s_Orders.First(o => o.Id == id);
+			return Ok(orderRepository.GetOrder(id));
 		}
 
 		[HttpPut("{id}")]
-		public Order EditOrderById(Guid id, [FromBody] Order order)
+		public ActionResult<Order> EditOrder(Guid id, [FromBody] OrderDto orderDto)
 		{
-			var idx = s_Orders.FindIndex(o => o.Id == id);
-			s_Orders[idx] = order;
+			var order = new Order() {
+				Id = id,
+				CustomerId = orderDto.CustomerId,
+				EmployeeId = orderDto.EmployeeId,
+				TenantId = orderDto.TenantId,
+				Total = orderDto.Total,
+				Tip = orderDto.Tip,
+				DeliveryType = orderDto.DeliveryType,
+				Date = orderDto.Date
+			};
 
-			return s_Orders[idx];
+			orderRepository.UpdateOrder(order);
+
+			return Ok(order);
 		}
 
 		[HttpDelete("{id}")]
-		public void DeleteOrderById(Guid id)
+		public ActionResult DeleteOrder(Guid id)
 		{
-			s_Orders = s_Orders.Where(o => o.Id != id).ToList();
+			orderRepository.DeleteOrder(id);
+
+			return Ok();
 		}
 
 		[HttpGet("{id}/Cart")]
-		public IEnumerable<Guid> GetOrderCartIds(Guid id)
+		public ActionResult<IEnumerable<Guid>> GetOrderCartIds(Guid id)
 		{
-			return s_Carts.Where(c => c.OrderId == id).Select(c => c.ItemId);
+			return Ok(cartRepository.GetOrderCartIds(id));
+		}
+
+		[HttpPost("{id}/Cart")]
+		public ActionResult<Cart> CreateOrderCart(Guid id, [FromBody] CartCreationDto cartDto)
+		{
+			var cart = new Cart() {
+				ItemId = cartDto.ItemId,
+				OrderId = id,
+				Quantity = cartDto.Quantity,
+				Discount = cartDto.Discount,
+				Description = cartDto.Description
+			};
+
+			cartRepository.CreateCart(cart);
+
+			return Ok(cart);
 		}
 
 		[HttpGet("{orderId}/Cart/{itemId}")]
-		public Cart GetOrderCartById(Guid orderId, Guid itemId)
+		public ActionResult<Cart> GetOrderCart(Guid orderId, Guid itemId)
 		{
-			return s_Carts.First(c => c.OrderId == orderId && c.ItemId == itemId);
+			return Ok(cartRepository.GetCart(orderId, itemId));
+		}
+
+		[HttpPut("{orderId}/Cart/{itemId}")]
+		public ActionResult<Cart> EditOrderCart(Guid orderId, Guid itemId, [FromBody] CartEditDto cartDto)
+		{
+			var cart = new Cart() {
+				ItemId = itemId,
+				OrderId = orderId,
+				Quantity = cartDto.Quantity,
+				Discount = cartDto.Discount,
+				Description = cartDto.Description
+			};
+
+			cartRepository.UpdateCart(cart);
+
+			return Ok(cart);
 		}
 
 		[HttpDelete("{orderId}/Cart/{itemId}")]
-		public void DeleteOrderCartById(Guid orderId, Guid itemId)
+		public ActionResult DeleteOrderCart(Guid orderId, Guid itemId)
 		{
-			s_Carts = s_Carts.Where(c => c.OrderId != orderId && c.ItemId != itemId).ToList();
+			cartRepository.DeleteCart(orderId, itemId);
+
+			return Ok();
 		}
 
 		[HttpGet("{id}/Payment")]
-		public IEnumerable<Guid> GetOrderPaymentIds(Guid id)
+		public ActionResult<IEnumerable<Guid>> GetOrderPaymentIds(Guid id)
 		{
-			throw new NotImplementedException();
+			return Ok(paymentRepository.GetOrderPaymentIds(id));
 		}
 
-		[HttpGet("{orderId}/Payment/{paymentId}")]
-		public Payment GetOrderPaymentById(Guid orderId, Guid paymentId)
+		[HttpPost("{id}/Payment")]
+		public ActionResult<Payment> CreateOrderPayment(Guid id, [FromBody] PaymentCreationDto paymentDto)
 		{
-			throw new NotImplementedException();
-		}
+			var payment = new Payment() {
+				Id = Guid.NewGuid(),
+				OrderId = id,
+				Provider = paymentDto.Provider,
+				Status = paymentDto.Status
+			};
 
-		[HttpDelete("{orderId}/Payment/{paymentId}")]
-		public void DeleteOrderPaymentById(Guid orderId, Guid paymentId)
-		{
-			throw new NotImplementedException();
+			paymentRepository.CreatePayment(payment);
+
+			return Ok(payment);
 		}
 
 		[HttpGet("{id}/Delivery")]
-		public IEnumerable<Guid> GetOrderDeliveryIds(Guid id)
+		public ActionResult<IEnumerable<Guid>> GetOrderDeliveryIds(Guid id)
 		{
-			throw new NotImplementedException(); 
+			return Ok(deliveryRepository.GetOrderDeliveryIds(id));
 		}
 
-		[HttpGet("{orderId}/Delivery/{deliveryId}")]
-		public Delivery GetOrderDeliveryById(Guid orderId, Guid deliveryId)
+		[HttpPost("{id}/Delivery")]
+		public ActionResult<Delivery> CreateOrderDelivery(Guid id, [FromBody] DeliveryCreationDto deliveryDto)
 		{
-			throw new NotImplementedException();
-		}
+			var delivery = new Delivery() {
+				Id = Guid.NewGuid(),
+				OrderId = id,
+				Address = deliveryDto.Address,
+				PostCode = deliveryDto.PostCode,
+				Details = deliveryDto.Details
+			};
 
-		[HttpDelete("{orderId}/Delivery/{deliveryId}")]
-		public void DeleteOrderDeliveryById(Guid orderId, Guid deliveryId)
-		{
-			throw new NotImplementedException();
+			deliveryRepository.CreateDelivery(delivery);
+
+			return Ok(delivery);
 		}
 	}
 }
