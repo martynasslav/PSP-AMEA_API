@@ -6,7 +6,7 @@ namespace PSP_AMEA_API.Repository
 	{
 		void CreateCart(Cart cart);
 		IEnumerable<Guid> GetOrderCartIds(Guid orderId);
-		Cart GetCart(Guid orderId, Guid itemId);
+		Cart? GetCart(Guid orderId, Guid itemId);
 		void UpdateCart(Cart cart);
 		void DeleteCart(Guid orderId, Guid itemId);
 	}

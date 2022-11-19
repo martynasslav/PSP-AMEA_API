@@ -8,6 +8,6 @@ namespace PSP_AMEA_API.Repository
 		void UpdateItem(Item item);
 		void DeleteItem(Guid id);
 		IEnumerable<Item> GetTenantItems(Guid tenantId);
-		Item GetItem(Guid id);
+		Item? GetItem(Guid id);
 	}
 }

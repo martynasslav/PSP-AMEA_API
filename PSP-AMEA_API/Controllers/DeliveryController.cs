@@ -19,7 +19,9 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{id}")]
 		public ActionResult<Delivery> GetDelivery(Guid id)
 		{
-			return Ok(_deliveryRepository.GetDelivery(id));
+			var delivery = _deliveryRepository.GetDelivery(id);
+
+			return delivery == null ? NoContent() : Ok(delivery);
 		}
 
 		[HttpPut("{id}")]

@@ -21,7 +21,9 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{id}")]
 		public ActionResult<Item> GetItem(Guid id)
 		{
-			return Ok(_itemRepository.GetItem(id));
+			var item = _itemRepository.GetItem(id);
+
+			return item == null ? NoContent() : Ok(item);
 		}
 
 		[HttpPut("{id}")]
@@ -76,7 +78,9 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{itemId}/Review/{userId}")]
 		public ActionResult<Review> GetItemReview(Guid itemId, Guid userId)
 		{
-			return Ok(_reviewRepository.GetReview(itemId, userId));
+			var review = _reviewRepository.GetReview(itemId, userId);
+
+			return review == null ? NoContent() : Ok(review);
 		}
 
 		[HttpPut("{itemId}/Review/{userId}")]

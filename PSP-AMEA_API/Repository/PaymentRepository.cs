@@ -21,9 +21,9 @@ namespace PSP_AMEA_API.Repository
 			return payments.Where(p => p.OrderId == orderId).Select(p => p.Id);
 		}
 
-		public Payment GetPaymentById(Guid paymentId)
+		public Payment? GetPaymentById(Guid paymentId)
 		{
-			return payments.First(p => p.Id == paymentId);
+			return payments.SingleOrDefault(p => p.Id == paymentId);
 		}
 
 		public void UpdatePayment(Payment payment)

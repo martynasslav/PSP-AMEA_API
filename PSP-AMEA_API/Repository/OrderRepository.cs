@@ -27,9 +27,9 @@ namespace PSP_AMEA_API.Repository
 			return orders.Select(o => o.Id);
 		}
 
-		public Order GetOrder(Guid id)
+		public Order? GetOrder(Guid id)
 		{
-			return orders.First(o => o.Id == id);
+			return orders.SingleOrDefault(o => o.Id == id);
 		}
 	}
 }

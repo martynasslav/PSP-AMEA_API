@@ -21,9 +21,9 @@ namespace PSP_AMEA_API.Repository
 			return reviews.Where(r => r.ItemId == itemId);
 		}
 
-		public Review GetReview(Guid itemId, Guid userId)
+		public Review? GetReview(Guid itemId, Guid userId)
 		{
-			return reviews.First(r => r.ItemId == itemId && r.UserId == userId);
+			return reviews.SingleOrDefault(r => r.ItemId == itemId && r.UserId == userId);
 		}
 
 		public IEnumerable<Review> GetUserReviews(Guid userId)

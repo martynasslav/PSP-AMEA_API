@@ -9,6 +9,6 @@ namespace PSP_AMEA_API.Repository
 		void DeleteReview(Guid itemId, Guid userId);
 		IEnumerable<Review> GetItemReviews(Guid itemId);
 		IEnumerable<Review> GetUserReviews(Guid userId);
-		Review GetReview(Guid itemId, Guid userId);
+		Review? GetReview(Guid itemId, Guid userId);
 	}
 }

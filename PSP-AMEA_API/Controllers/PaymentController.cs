@@ -19,7 +19,9 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{id}")]
 		public ActionResult<Payment> GetPayment(Guid id)
 		{
-			return Ok(_paymentRepository.GetPaymentById(id));
+			var payment = _paymentRepository.GetPaymentById(id);
+
+			return payment == null ? NoContent() : Ok(payment);
 		}
 
 		[HttpPut("{id}")]

@@ -13,12 +13,23 @@ namespace PSP_AMEA_API.Repository
 
 		public void DeleteDelivery(Guid deliveryId)
 		{
-			deliveries.RemoveAll(d => d.Id == deliveryId);
+			int idx;
+
+			try
+			{
+				idx = deliveries.FindIndex(d => d.Id == deliveryId);
+			}
+			catch (ArgumentOutOfRangeException)
+			{
+				throw;
+			}
+
+			deliveries.RemoveAt(idx);
 		}
 
-		public Delivery GetDelivery(Guid deliveryId)
+		public Delivery? GetDelivery(Guid deliveryId)
 		{
-			return deliveries.First(d => d.Id == deliveryId);
+			return deliveries.SingleOrDefault(d => d.Id == deliveryId);
 		}
 
 		public IEnumerable<Guid> GetOrderDeliveryIds(Guid orderId)
@@ -28,7 +39,17 @@ namespace PSP_AMEA_API.Repository
 
 		public void UpdateDelivery(Delivery delivery)
 		{
-			var idx = deliveries.FindIndex(d => d.Id == delivery.Id);
+			int idx;
+
+			try
+			{
+				idx = deliveries.FindIndex(d => d.Id == delivery.Id);
+			}
+			catch(ArgumentOutOfRangeException)
+			{
+				throw;
+			}
+
 			deliveries[idx] = delivery;
 		}
 	}

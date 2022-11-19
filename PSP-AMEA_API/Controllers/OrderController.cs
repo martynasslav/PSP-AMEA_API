@@ -50,7 +50,9 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{id}")]
 		public ActionResult<Order> GetOrder(Guid id)
 		{
-			return Ok(_orderRepository.GetOrder(id));
+			var order = _orderRepository.GetOrder(id);
+
+			return order == null ? NoContent() : Ok(order);
 		}
 
 		[HttpPut("{id}")]
@@ -105,7 +107,9 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{orderId}/Cart/{itemId}")]
 		public ActionResult<Cart> GetOrderCart(Guid orderId, Guid itemId)
 		{
-			return Ok(_cartRepository.GetCart(orderId, itemId));
+			var cart = _cartRepository.GetCart(orderId, itemId);
+
+			return cart == null ? NoContent() : Ok(cart);
 		}
 
 		[HttpPut("{orderId}/Cart/{itemId}")]

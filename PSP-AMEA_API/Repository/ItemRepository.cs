@@ -16,9 +16,9 @@ namespace PSP_AMEA_API.Repository
 			items.RemoveAll(i => i.Id == id);
 		}
 
-		public Item GetItem(Guid id)
+		public Item? GetItem(Guid id)
 		{
-			return items.First(i => i.Id == id);
+			return items.SingleOrDefault(i => i.Id == id);
 		}
 
 		public IEnumerable<Item> GetTenantItems(Guid tenantId)

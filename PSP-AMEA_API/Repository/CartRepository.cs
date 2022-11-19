@@ -17,9 +17,9 @@ namespace PSP_AMEA_API.Repository
 			carts[idx] = cart;
 		}
 
-		public Cart GetCart(Guid orderId, Guid itemId)
+		public Cart? GetCart(Guid orderId, Guid itemId)
 		{
-			return carts.First(c => c.OrderId == orderId && c.ItemId == itemId);
+			return carts.SingleOrDefault(c => c.OrderId == orderId && c.ItemId == itemId);
 		}
 
 		public IEnumerable<Guid> GetOrderCartIds(Guid orderId)

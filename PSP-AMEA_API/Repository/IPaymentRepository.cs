@@ -6,7 +6,7 @@ namespace PSP_AMEA_API.Repository
 	{
 		void CreatePayment(Payment payment);
 		IEnumerable<Guid> GetOrderPaymentIds(Guid orderId);
-		Payment GetPaymentById(Guid paymentId);
+		Payment? GetPaymentById(Guid paymentId);
 		void UpdatePayment(Payment payment);
 		void DeletePayment(Guid paymentId);
 	}
