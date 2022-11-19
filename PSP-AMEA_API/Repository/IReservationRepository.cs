@@ -6,8 +6,8 @@ namespace PSP_AMEA_API.Repository
     public interface IReservationRepository
     {
         Reservation CreateReservation(ReservationDto dto);
-        Reservation UpdateReservation(Reservation reservation);
-        Reservation DeleteReservation(Reservation reservation);
+        void UpdateReservation(Reservation reservation);
+        void DeleteReservation(Reservation reservation);
         IEnumerable<Reservation> GetAllReservations();
         Reservation GetReservationByOrderId(Guid id);
     }

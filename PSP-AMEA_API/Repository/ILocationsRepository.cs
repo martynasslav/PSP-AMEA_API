@@ -9,6 +9,6 @@ namespace PSP_AMEA_API.Repository
         void UpdateLocations(Locations locations);
         void DeleteLocations(Locations locations);
         IEnumerable<Locations> GetAllLocations();
-        Locations GetLocationsById(Guid id);
+        Locations GetLocationById(Guid id);
     }
 }
