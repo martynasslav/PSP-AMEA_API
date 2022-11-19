@@ -15,6 +15,7 @@ class Program
 		builder.Services.AddSingleton<IInvoiceRepository, InvoiceRepository>();
         builder.Services.AddSingleton<ILocationRepository, LocationRepository>();
         builder.Services.AddSingleton<IReservationRepository, ReservationRepository>();
+        builder.Services.AddSingleton<ITenantRepository, TenantRepository>();
         builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen(c => {

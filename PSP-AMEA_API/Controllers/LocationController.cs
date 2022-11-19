@@ -57,7 +57,7 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="201">Location created.</response>
         [ProducesResponseType(201)]
         [HttpPost(Name = "CreateLocation")]
-        public ActionResult<Location> CreateLocations(CreateLocationDto dto)
+        public ActionResult<Location> CreateLocation(CreateLocationDto dto)
         {
             var location = _locationRepository.CreateLocation(dto);
             return CreatedAtAction("GetLocation", new { id = location.Id }, location);
