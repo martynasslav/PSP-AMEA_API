@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using PSP_AMEA_API.Repository;
 using System.Reflection;
 
 class Program
@@ -11,7 +12,10 @@ class Program
 	{
 		var builder = WebApplication.CreateBuilder();
 
-		builder.Services.AddControllers();
+		builder.Services.AddSingleton<IInvoiceRepository, InvoiceRepository>();
+        builder.Services.AddSingleton<ILocationsRepository, LocationsRepository>();
+        builder.Services.AddSingleton<IReservationRepository, ReservationRepository>();
+        builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen(c => {
 			c.SwaggerDoc("v1", new OpenApiInfo { Title = "AMEA API", Version = "v1" });
