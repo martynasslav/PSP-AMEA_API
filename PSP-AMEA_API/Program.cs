@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using PSP_AMEA_API.Repository;
 using System.Reflection;
 
 class Program
@@ -7,6 +8,13 @@ class Program
 	{
 		var builder = WebApplication.CreateBuilder();
 
+		builder.Services.AddSingleton<ICartRepository, CartRepository>();
+		builder.Services.AddSingleton<IDeliveryRepository, DeliveryRepository>();
+		builder.Services.AddSingleton<IItemRepository, ItemRepository>();
+		builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+		builder.Services.AddSingleton<IPaymentRepository, PaymentRepository>();
+		builder.Services.AddSingleton<IReviewRepository, ReviewRepository>();
+		
 		builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen(c => {

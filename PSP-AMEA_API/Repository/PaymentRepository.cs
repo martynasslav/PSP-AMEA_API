@@ -4,7 +4,7 @@ namespace PSP_AMEA_API.Repository
 {
 	public class PaymentRepository : IPaymentRepository
 	{
-		private static readonly List<Payment> payments = new();
+		private readonly List<Payment> payments = new();
 
 		public void CreatePayment(Payment payment)
 		{

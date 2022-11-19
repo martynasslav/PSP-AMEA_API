@@ -4,7 +4,7 @@ namespace PSP_AMEA_API.Repository
 {
 	public class ItemRepository : IItemRepository
 	{
-		private static readonly List<Item> items = new();
+		private readonly List<Item> items = new();
 
 		public void CreateItem(Item item)
 		{

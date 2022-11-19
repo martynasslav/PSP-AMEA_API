@@ -9,13 +9,19 @@ namespace PSP_AMEA_API.Controllers
 	[ApiController]
 	public class ItemController : ControllerBase
 	{
-		private readonly IItemRepository itemRepository = new ItemRepository();
-		private readonly IReviewRepository reviewRepository = new ReviewRepository();
+		private readonly IItemRepository _itemRepository;
+		private readonly IReviewRepository _reviewRepository;
+
+		public ItemController(IItemRepository itemRepository, IReviewRepository reviewRepository)
+		{
+			this._itemRepository = itemRepository;
+			this._reviewRepository = reviewRepository;
+		}
 
 		[HttpGet("{id}")]
 		public ActionResult<Item> GetItem(Guid id)
 		{
-			return Ok(itemRepository.GetItem(id));
+			return Ok(_itemRepository.GetItem(id));
 		}
 
 		[HttpPut("{id}")]
@@ -32,7 +38,7 @@ namespace PSP_AMEA_API.Controllers
 				TenantId = itemDto.TenantId
 			};
 
-			itemRepository.UpdateItem(item);
+			_itemRepository.UpdateItem(item);
 
 			return Ok(item);
 		}
@@ -40,7 +46,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpDelete("{id}")]
 		public ActionResult DeleteItem(Guid id)
 		{
-			itemRepository.DeleteItem(id);
+			_itemRepository.DeleteItem(id);
 
 			return Ok();
 		}
@@ -48,7 +54,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{id}/Review")]
 		public ActionResult<IEnumerable<Review>> GetItemReviewIds(Guid id)
 		{
-			return Ok(reviewRepository.GetItemReviews(id));
+			return Ok(_reviewRepository.GetItemReviews(id));
 		}
 
 		[HttpPost("{id}/Review")]
@@ -62,7 +68,7 @@ namespace PSP_AMEA_API.Controllers
 				UserId = reviewDto.UserId
 			};
 
-			reviewRepository.CreateReview(review);
+			_reviewRepository.CreateReview(review);
 
 			return Ok(review);
 		}
@@ -70,7 +76,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{itemId}/Review/{userId}")]
 		public ActionResult<Review> GetItemReview(Guid itemId, Guid userId)
 		{
-			return Ok(reviewRepository.GetReview(itemId, userId));
+			return Ok(_reviewRepository.GetReview(itemId, userId));
 		}
 
 		[HttpPut("{itemId}/Review/{userId}")]
@@ -84,7 +90,7 @@ namespace PSP_AMEA_API.Controllers
 				UserId = userId
 			};
 
-			reviewRepository.UpdateReview(review);
+			_reviewRepository.UpdateReview(review);
 
 			return Ok(review);
 		}
@@ -92,7 +98,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpDelete("{itemId}/Review/{userId}")]
 		public ActionResult DeleteItemReview(Guid itemId, Guid userId)
 		{
-			reviewRepository.DeleteReview(itemId, userId);
+			_reviewRepository.DeleteReview(itemId, userId);
 
 			return Ok();
 		}

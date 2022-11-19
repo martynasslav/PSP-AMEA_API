@@ -4,7 +4,7 @@ namespace PSP_AMEA_API.Repository
 {
 	public class CartRepository : ICartRepository
 	{
-		private static readonly List<Cart> carts = new();
+		private readonly List<Cart> carts = new();
 
 		public void CreateCart(Cart cart)
 		{

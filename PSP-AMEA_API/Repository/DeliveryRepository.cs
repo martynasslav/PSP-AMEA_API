@@ -4,7 +4,7 @@ namespace PSP_AMEA_API.Repository
 {
 	public class DeliveryRepository : IDeliveryRepository
 	{
-		private static readonly List<Delivery> deliveries = new();
+		private readonly List<Delivery> deliveries = new();
 
 		public void CreateDelivery(Delivery delivery)
 		{

@@ -9,12 +9,17 @@ namespace PSP_AMEA_API.Controllers
 	[ApiController]
 	public class PaymentController : ControllerBase
 	{
-		private readonly IPaymentRepository paymentRepository = new PaymentRepository();
+		private readonly IPaymentRepository _paymentRepository;
+
+		public PaymentController(IPaymentRepository paymentRepository)
+		{
+			this._paymentRepository = paymentRepository;
+		}
 
 		[HttpGet("{id}")]
 		public ActionResult<Payment> GetPayment(Guid id)
 		{
-			return Ok(paymentRepository.GetPaymentById(id));
+			return Ok(_paymentRepository.GetPaymentById(id));
 		}
 
 		[HttpPut("{id}")]
@@ -27,7 +32,7 @@ namespace PSP_AMEA_API.Controllers
 				Status = paymentDto.Status
 			};
 
-			paymentRepository.UpdatePayment(payment);
+			_paymentRepository.UpdatePayment(payment);
 
 			return Ok(payment);
 		}
@@ -35,7 +40,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpDelete("{id}")]
 		public ActionResult DeletePayment(Guid id)
 		{
-			paymentRepository.DeletePayment(id);
+			_paymentRepository.DeletePayment(id);
 
 			return Ok();
 		}

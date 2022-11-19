@@ -4,7 +4,7 @@ namespace PSP_AMEA_API.Repository
 {
 	public class ReviewRepository : IReviewRepository
 	{
-		private static readonly List<Review> reviews = new();
+		private readonly List<Review> reviews = new();
 
 		public void CreateReview(Review review)
 		{

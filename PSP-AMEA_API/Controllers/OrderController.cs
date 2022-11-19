@@ -9,15 +9,23 @@ namespace PSP_AMEA_API.Controllers
 	[ApiController]
 	public class OrderController : ControllerBase
 	{
-		private readonly IOrderRepository orderRepository = new OrderRepository();
-		private readonly ICartRepository cartRepository = new CartRepository();
-		private readonly IPaymentRepository paymentRepository = new PaymentRepository();
-		private readonly IDeliveryRepository deliveryRepository = new DeliveryRepository();
+		private readonly IOrderRepository _orderRepository;
+		private readonly ICartRepository _cartRepository;
+		private readonly IPaymentRepository _paymentRepository;
+		private readonly IDeliveryRepository _deliveryRepository;
+
+		public OrderController(IOrderRepository orderRepository, ICartRepository cartRepository, IPaymentRepository paymentRepository, IDeliveryRepository deliveryRepository)
+		{
+			this._orderRepository = orderRepository;
+			this._cartRepository = cartRepository;
+			this._paymentRepository = paymentRepository;
+			this._deliveryRepository = deliveryRepository;
+		}
 
 		[HttpGet]
 		public ActionResult<IEnumerable<Guid>> GetOrderIds()
 		{
-			return Ok(orderRepository.GetOrderIds());
+			return Ok(_orderRepository.GetOrderIds());
 		}
 
 		[HttpPost]
@@ -34,7 +42,7 @@ namespace PSP_AMEA_API.Controllers
 				Date = orderDto.Date
 			};
 
-			orderRepository.CreateOrder(order);
+			_orderRepository.CreateOrder(order);
 
 			return Ok(order);
 		}
@@ -42,7 +50,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{id}")]
 		public ActionResult<Order> GetOrder(Guid id)
 		{
-			return Ok(orderRepository.GetOrder(id));
+			return Ok(_orderRepository.GetOrder(id));
 		}
 
 		[HttpPut("{id}")]
@@ -59,7 +67,7 @@ namespace PSP_AMEA_API.Controllers
 				Date = orderDto.Date
 			};
 
-			orderRepository.UpdateOrder(order);
+			_orderRepository.UpdateOrder(order);
 
 			return Ok(order);
 		}
@@ -67,7 +75,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpDelete("{id}")]
 		public ActionResult DeleteOrder(Guid id)
 		{
-			orderRepository.DeleteOrder(id);
+			_orderRepository.DeleteOrder(id);
 
 			return Ok();
 		}
@@ -75,7 +83,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{id}/Cart")]
 		public ActionResult<IEnumerable<Guid>> GetOrderCartIds(Guid id)
 		{
-			return Ok(cartRepository.GetOrderCartIds(id));
+			return Ok(_cartRepository.GetOrderCartIds(id));
 		}
 
 		[HttpPost("{id}/Cart")]
@@ -89,7 +97,7 @@ namespace PSP_AMEA_API.Controllers
 				Description = cartDto.Description
 			};
 
-			cartRepository.CreateCart(cart);
+			_cartRepository.CreateCart(cart);
 
 			return Ok(cart);
 		}
@@ -97,7 +105,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{orderId}/Cart/{itemId}")]
 		public ActionResult<Cart> GetOrderCart(Guid orderId, Guid itemId)
 		{
-			return Ok(cartRepository.GetCart(orderId, itemId));
+			return Ok(_cartRepository.GetCart(orderId, itemId));
 		}
 
 		[HttpPut("{orderId}/Cart/{itemId}")]
@@ -111,7 +119,7 @@ namespace PSP_AMEA_API.Controllers
 				Description = cartDto.Description
 			};
 
-			cartRepository.UpdateCart(cart);
+			_cartRepository.UpdateCart(cart);
 
 			return Ok(cart);
 		}
@@ -119,7 +127,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpDelete("{orderId}/Cart/{itemId}")]
 		public ActionResult DeleteOrderCart(Guid orderId, Guid itemId)
 		{
-			cartRepository.DeleteCart(orderId, itemId);
+			_cartRepository.DeleteCart(orderId, itemId);
 
 			return Ok();
 		}
@@ -127,7 +135,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{id}/Payment")]
 		public ActionResult<IEnumerable<Guid>> GetOrderPaymentIds(Guid id)
 		{
-			return Ok(paymentRepository.GetOrderPaymentIds(id));
+			return Ok(_paymentRepository.GetOrderPaymentIds(id));
 		}
 
 		[HttpPost("{id}/Payment")]
@@ -140,7 +148,7 @@ namespace PSP_AMEA_API.Controllers
 				Status = paymentDto.Status
 			};
 
-			paymentRepository.CreatePayment(payment);
+			_paymentRepository.CreatePayment(payment);
 
 			return Ok(payment);
 		}
@@ -148,7 +156,7 @@ namespace PSP_AMEA_API.Controllers
 		[HttpGet("{id}/Delivery")]
 		public ActionResult<IEnumerable<Guid>> GetOrderDeliveryIds(Guid id)
 		{
-			return Ok(deliveryRepository.GetOrderDeliveryIds(id));
+			return Ok(_deliveryRepository.GetOrderDeliveryIds(id));
 		}
 
 		[HttpPost("{id}/Delivery")]
@@ -162,7 +170,7 @@ namespace PSP_AMEA_API.Controllers
 				Details = deliveryDto.Details
 			};
 
-			deliveryRepository.CreateDelivery(delivery);
+			_deliveryRepository.CreateDelivery(delivery);
 
 			return Ok(delivery);
 		}
