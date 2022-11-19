@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PSP_AMEA_API.DataModels
+﻿namespace PSP_AMEA_API.Dtos
 {
-    public class Locations
+    public class LocationDto
     {
         public Guid Id { get; set; }
         public Guid TenantId { get; set; }

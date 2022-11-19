@@ -12,13 +12,13 @@ namespace PSP_AMEA_API.Controllers
 {
     [Route("v1/[controller]")]
     [ApiController]
-    public class LocationsController : ControllerBase
+    public class LocationController : ControllerBase
     {
-        private readonly ILocationsRepository _locationsRepository;
+        private readonly ILocationRepository _locationRepository;
 
-        public LocationsController(ILocationsRepository locationsRepository)
+        public LocationController(ILocationRepository locationRepository)
         {
-            _locationsRepository = locationsRepository;
+            _locationRepository = locationRepository;
         }
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="200">Locations information returned.</response>
         [ProducesResponseType(200)]
         [HttpGet(Name = "GetLocations")]
-        public IEnumerable<Locations> GetAllLocations()
+        public IEnumerable<Location> GetAllLocations()
         {
-            return _locationsRepository.GetAllLocations();
+            return _locationRepository.GetAllLocations();
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="200">Location information returned.</response>
         [ProducesResponseType(200)]
         [HttpGet("{id}", Name = "GetLocation")]
-        public ActionResult<Locations> GetLocation(Guid id)
+        public ActionResult<Location> GetLocation(Guid id)
         {
-            var location = _locationsRepository.GetLocationById(id);
+            var location = _locationRepository.GetLocationById(id);
 
             if (location == null)
             {
@@ -57,9 +57,9 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="201">Location created.</response>
         [ProducesResponseType(201)]
         [HttpPost(Name = "CreateLocation")]
-        public ActionResult<Locations> CreateLocations(CreateLocationsDto dto)
+        public ActionResult<Location> CreateLocations(CreateLocationDto dto)
         {
-            var location = _locationsRepository.CreateLocations(dto);
+            var location = _locationRepository.CreateLocation(dto);
             return CreatedAtAction("GetLocation", new { id = location.Id }, location);
         }
 
@@ -70,7 +70,7 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="200">Location information updated.</response>
         [ProducesResponseType(200)]
         [HttpPut("{id}", Name = "UpdateLocation")]
-        public ActionResult<Locations> UpdateLocations(Guid id, CreateLocationsDto dto)
+        public ActionResult<Location> UpdateLocation(Guid id, CreateLocationDto dto)
         {
             var location = GetLocation(id);
 
@@ -78,10 +78,10 @@ namespace PSP_AMEA_API.Controllers
             {
                 return NotFound();
             }
-            Locations updatedLocation = new()
+            Location updatedLocation = new()
             { Id = id, TenantId = dto.TenantId, Address = dto.Address, WorkingFrom = dto.WorkingFrom, WorkingTo = dto.WorkingTo };
 
-            _locationsRepository.UpdateLocations(updatedLocation);
+            _locationRepository.UpdateLocation(updatedLocation);
 
             return Ok();
         }
@@ -93,16 +93,16 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="200">Location successfully deleted.</response>
         [ProducesResponseType(200)]
         [HttpDelete("{id}")]
-        public ActionResult<Locations> DeleteLocations(Guid id)
+        public ActionResult<Location> DeleteLocation(Guid id)
         {
-            var location = _locationsRepository.GetLocationById(id);
+            var location = _locationRepository.GetLocationById(id);
 
             if (location == null)
             {
                 return NotFound();
             }
 
-            _locationsRepository.DeleteLocations(location);
+            _locationRepository.DeleteLocation(location);
 
             return Ok();
         }

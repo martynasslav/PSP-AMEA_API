@@ -13,7 +13,7 @@ class Program
 		var builder = WebApplication.CreateBuilder();
 
 		builder.Services.AddSingleton<IInvoiceRepository, InvoiceRepository>();
-        builder.Services.AddSingleton<ILocationsRepository, LocationsRepository>();
+        builder.Services.AddSingleton<ILocationRepository, LocationRepository>();
         builder.Services.AddSingleton<IReservationRepository, ReservationRepository>();
         builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
