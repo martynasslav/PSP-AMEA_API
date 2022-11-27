@@ -8,7 +8,7 @@ namespace PSP_AMEA_API.Repository
         Location CreateLocation(CreateLocationDto dto);
         void UpdateLocation(Location location);
         void DeleteLocation(Location location);
-        IEnumerable<Location> GetAllLocations();
+        IEnumerable<Location> GetAllLocations(int offset, int limit);
         Location GetLocationById(Guid id);
     }
 }

@@ -24,12 +24,14 @@ namespace PSP_AMEA_API.Controllers
         /// <summary>
         /// Gets information about all available locations.
         /// </summary>
+        /// <param name="offset">Amount of entires to skip</param>
+        /// <param name="limit">Maximum amount of entries to get</param>
         /// <response code="200">Locations information returned.</response>
         [ProducesResponseType(200)]
         [HttpGet(Name = "GetLocations")]
-        public IEnumerable<Location> GetAllLocations()
+        public IEnumerable<Location> GetAllLocations(int offset = 0, int limit = 20)
         {
-            return _locationRepository.GetAllLocations();
+            return _locationRepository.GetAllLocations(offset, limit);
         }
 
         /// <summary>

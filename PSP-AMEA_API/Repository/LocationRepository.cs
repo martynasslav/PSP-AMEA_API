@@ -1,5 +1,6 @@
 ﻿using PSP_AMEA_API.DataModels;
 using PSP_AMEA_API.Dtos;
+using System.Collections.Generic;
 
 namespace PSP_AMEA_API.Repository
 {
@@ -30,9 +31,9 @@ namespace PSP_AMEA_API.Repository
             locations.Remove(location);
         }
 
-        public IEnumerable<Location> GetAllLocations()
+        public IEnumerable<Location> GetAllLocations(int offset, int limit)
         {
-            return locations;
+            return locations.Skip(offset).Take(limit);
         }
 
         public Location GetLocationById(Guid id)

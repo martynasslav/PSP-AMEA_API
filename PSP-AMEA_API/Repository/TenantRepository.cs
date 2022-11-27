@@ -1,5 +1,6 @@
 ﻿using PSP_AMEA_API.DataModels;
 using PSP_AMEA_API.Dtos;
+using System.Collections.Generic;
 
 namespace PSP_AMEA_API.Repository
 {
@@ -30,9 +31,9 @@ namespace PSP_AMEA_API.Repository
             tenants.Remove(tenant);
         }
 
-        public IEnumerable<Tenant> GetAllTenants()
+        public IEnumerable<Tenant> GetAllTenants(int offset, int limit)
         {
-            return tenants;
+            return tenants.Skip(offset).Take(limit);
         }
 
         public Tenant GetTenantById(Guid id)

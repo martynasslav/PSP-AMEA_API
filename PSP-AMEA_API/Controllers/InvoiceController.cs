@@ -24,12 +24,14 @@ namespace PSP_AMEA_API.Controllers
         /// <summary>
         /// Gets information about all available invoices.
         /// </summary>
+        /// <param name="offset">Amount of entires to skip</param>
+        /// <param name="limit">Maximum amount of entries to get</param>
         /// <response code="200">Invoices information returned.</response>
         [ProducesResponseType(200)]
         [HttpGet(Name = "GetInvoices")]
-        public IEnumerable<Invoice> GetAllInvoices()
+        public IEnumerable<Invoice> GetAllInvoices(int offset = 0, int limit = 20)
         {
-            return _invoiceRepository.GetAllInvoices();
+            return _invoiceRepository.GetAllInvoices(offset, limit);
         }
 
         /// <summary>

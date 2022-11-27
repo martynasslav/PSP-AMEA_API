@@ -24,12 +24,14 @@ namespace PSP_AMEA_API.Controllers
         /// <summary>
         /// Gets information about all available tenants.
         /// </summary>
+        /// <param name="offset">Amount of entires to skip</param>
+        /// <param name="limit">Maximum amount of entries to get</param>
         /// <response code="200">Tenants information returned.</response>
         [ProducesResponseType(200)]
         [HttpGet(Name = "GetTenants")]
-        public IEnumerable<Tenant> GetAllTenants()
+        public IEnumerable<Tenant> GetAllTenants(int offset = 0, int limit = 20)
         {
-            return _tenantRepository.GetAllTenants();
+            return _tenantRepository.GetAllTenants(offset, limit);
         }
 
         /// <summary>
