@@ -31,9 +31,9 @@ namespace PSP_AMEA_API.Repository
             locations.Remove(location);
         }
 
-        public IEnumerable<Location> GetAllLocations(int offset, int limit)
+        public IEnumerable<Location> GetAllLocations()
         {
-            return locations.Skip(offset).Take(limit);
+            return locations;
         }
 
         public Location GetLocationById(Guid id)

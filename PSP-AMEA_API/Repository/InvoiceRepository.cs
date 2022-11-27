@@ -30,9 +30,9 @@ namespace PSP_AMEA_API.Repository
             invoices.Remove(invoice);
         }
 
-        public IEnumerable<Invoice> GetAllInvoices(int offset, int limit)
+        public IEnumerable<Invoice> GetAllInvoices()
         {
-            return invoices.Skip(offset).Take(limit);
+            return invoices;
         }
 
         public Invoice GetInvoiceById(Guid id)

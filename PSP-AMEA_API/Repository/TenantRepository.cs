@@ -31,9 +31,9 @@ namespace PSP_AMEA_API.Repository
             tenants.Remove(tenant);
         }
 
-        public IEnumerable<Tenant> GetAllTenants(int offset, int limit)
+        public IEnumerable<Tenant> GetAllTenants()
         {
-            return tenants.Skip(offset).Take(limit);
+            return tenants;
         }
 
         public Tenant GetTenantById(Guid id)

@@ -8,7 +8,7 @@ namespace PSP_AMEA_API.Repository
         Invoice CreateInvoice(CreateInvoiceDto dto);
         void UpdateInvoice(Invoice invoice);
         void DeleteInvoice(Invoice invoice);
-        IEnumerable<Invoice> GetAllInvoices(int offset, int limit);
+        IEnumerable<Invoice> GetAllInvoices();
         Invoice GetInvoiceById(Guid id);
     }
 }

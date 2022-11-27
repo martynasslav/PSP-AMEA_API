@@ -8,7 +8,7 @@ namespace PSP_AMEA_API.Repository
         Tenant CreateTenant(CreateTenantDto dto);
         void UpdateTenant(Tenant tenant);
         void DeleteTenant(Tenant tenant);
-        IEnumerable<Tenant> GetAllTenants(int offset, int limit);
+        IEnumerable<Tenant> GetAllTenants();
         Tenant GetTenantById(Guid id);
     }
 }
