@@ -24,14 +24,22 @@ namespace PSP_AMEA_API.Controllers
         /// <summary>
         /// Gets information about all available reservations.
         /// </summary>
-        /// <param name="offset">Amount of entires to skip</param>
+        /// <param name="offset">Amount of entries to skip</param>
         /// <param name="limit">Maximum amount of entries to get</param>
+        /// <param name="locationId">Optional filtering by location id</param>
         /// <response code="200">Reservations information returned.</response>
         [ProducesResponseType(200)]
         [HttpGet(Name = "GetReservations")]
-        public IEnumerable<Reservation> GetAllReservations(int offset = 0, int limit = 20)
+        public IEnumerable<Reservation> GetAllReservations(int offset = 0, int limit = 20, Guid? locationId = null)
         {
-            return _reservationRepository.GetAllReservations(offset, limit);
+            var reservations = _reservationRepository.GetAllReservations();
+
+            if (locationId != null)
+            {
+                reservations = reservations.Where(r => r.LocationId == locationId);
+            }
+
+            return reservations.Skip(offset).Take(limit);
         }
 
         /// <summary>

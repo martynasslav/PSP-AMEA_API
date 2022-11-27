@@ -31,7 +31,9 @@ namespace PSP_AMEA_API.Controllers
         [HttpGet(Name = "GetTenants")]
         public IEnumerable<Tenant> GetAllTenants(int offset = 0, int limit = 20)
         {
-            return _tenantRepository.GetAllTenants(offset, limit);
+            var tenants = _tenantRepository.GetAllTenants();
+
+            return tenants.Skip(offset).Take(limit);
         }
 
         /// <summary>

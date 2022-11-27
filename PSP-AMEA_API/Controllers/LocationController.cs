@@ -21,17 +21,25 @@ namespace PSP_AMEA_API.Controllers
             _locationRepository = locationRepository;
         }
 
-        /// <summary>
-        /// Gets information about all available locations.
-        /// </summary>
-        /// <param name="offset">Amount of entires to skip</param>
-        /// <param name="limit">Maximum amount of entries to get</param>
-        /// <response code="200">Locations information returned.</response>
-        [ProducesResponseType(200)]
+		/// <summary>
+		/// Gets information about all available locations.
+		/// </summary>
+		/// <param name="offset">Amount of entries to skip</param>
+		/// <param name="limit">Maximum amount of entries to get</param>
+		/// <param name="tenantId">Optional filtering by tenant id.</param>
+		/// <response code="200">Locations information returned</response>
+		[ProducesResponseType(200)]
         [HttpGet(Name = "GetLocations")]
-        public IEnumerable<Location> GetAllLocations(int offset = 0, int limit = 20)
+        public IEnumerable<Location> GetAllLocations(int offset = 0, int limit = 20, Guid? tenantId = null)
         {
-            return _locationRepository.GetAllLocations(offset, limit);
+            var locations = _locationRepository.GetAllLocations();
+
+            if (tenantId != null)
+            {
+                locations = locations.Where(l => l.TenantId == tenantId);
+            }
+
+            return locations.Skip(offset).Take(limit);
         }
 
         /// <summary>
