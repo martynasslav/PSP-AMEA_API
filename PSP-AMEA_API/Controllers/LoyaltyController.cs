@@ -16,6 +16,10 @@ namespace PSP_AMEA_API.Controllers
             this.repository = repository;
         }
 
+        /// <summary>
+		/// Gets information about all loyalties.
+		/// </summary>
+		/// <response code="200">Information about loyalties returned.</response>
         [HttpGet]
         public IEnumerable<LoyaltyDto> GetLoyalties()
         {
@@ -23,8 +27,14 @@ namespace PSP_AMEA_API.Controllers
             return loyalty;
         }
 
+        /// <summary>
+		/// Creates a loyalty program.
+		/// </summary>
+		/// <param name="loyalty">Loyalty objecxt</param>
+		/// <returns></returns>
+		/// <response code="200">Loyalty created.</response>
         [HttpPost]
-        public ActionResult<Loyalty> CreateLoyalty(Loyalty loyalty)
+        public ActionResult<LoyaltyDto> CreateLoyalty(Loyalty loyalty)
         {
             Loyalty newLoyalty = new()
             {
@@ -39,8 +49,15 @@ namespace PSP_AMEA_API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+		/// Gets information about an employee from specified employee identifier.
+		/// </summary>
+		/// <param name="id">Unique loyalty ID</param>
+        /// <param name="loyalty">Loyalty object</param>
+		/// <returns></returns>
+		/// <response code="200">Loyalty updated.</response>
         [HttpPut("{id}")]
-        public ActionResult<Loyalty> UpdateLoyalty(Guid id, Loyalty loyalty)
+        public ActionResult<LoyaltyDto> UpdateLoyalty(Guid id, Loyalty loyalty)
         {
             var existingLoyalty = repository.GetLoyaly(id);
 

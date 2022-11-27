@@ -50,6 +50,12 @@ namespace PSP_AMEA_API.Controllers
 			return employee.AsDto();
 		}
 
+		/// <summary>
+		/// Create an employee.
+		/// </summary>
+		/// <param name="employeeDto">Employee</param>
+		/// <returns></returns>
+		/// <response code="200">Employee created.</response>
 		[HttpPost]
 		public ActionResult<EmployeeDto> CreateEmployee(CreateEmployeeDto employeeDto)
         {
@@ -68,6 +74,13 @@ namespace PSP_AMEA_API.Controllers
 			return CreatedAtAction(nameof(GetEmployee), new {id = employee.Id}, employee.AsDto());
         }
 
+		/// <summary>
+		/// Update an employee.
+		/// </summary>
+		/// <param name="id">Employee ID</param>
+		/// <param name="employeeDto">Employee</param>
+		/// <returns></returns>
+		/// <response code="200">Employee updated.</response>
 		[HttpPut("{id}")]
 		public ActionResult UpdateEmployee(Guid id, UpdateEmployeeDto employeeDto)
         {
@@ -92,6 +105,12 @@ namespace PSP_AMEA_API.Controllers
 			return NoContent();
         }
 
+		/// <summary>
+		/// Delete an employee.
+		/// </summary>
+		/// <param name="id">Employee ID</param>
+		/// <returns></returns>
+		/// <response code="200">Employee deleted.</response>
 		[HttpDelete("{id}")]
 		public ActionResult DeleteEmployee (Guid id)
         {
