@@ -8,7 +8,8 @@ namespace PSP_AMEA_API.Repository
         Reservation CreateReservation(ReservationDto dto);
         void UpdateReservation(Reservation reservation);
         void DeleteReservation(Reservation reservation);
-        IEnumerable<Reservation> GetAllReservations();
+        IEnumerable<Reservation> GetAllReservations(int offset, int limit);
         Reservation GetReservationByOrderId(Guid id);
+        IEnumerable<Reservation> GetReservationByLocationId(Guid id);
     }
 }

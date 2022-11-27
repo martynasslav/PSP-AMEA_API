@@ -24,24 +24,26 @@ namespace PSP_AMEA_API.Controllers
         /// <summary>
         /// Gets information about all available reservations.
         /// </summary>
+        /// <param name="offset">Amount of entires to skip</param>
+        /// <param name="limit">Maximum amount of entries to get</param>
         /// <response code="200">Reservations information returned.</response>
         [ProducesResponseType(200)]
         [HttpGet(Name = "GetReservations")]
-        public IEnumerable<Reservation> GetAllReservations()
+        public IEnumerable<Reservation> GetAllReservations(int offset = 0, int limit = 20)
         {
-            return _reservationRepository.GetAllReservations();
+            return _reservationRepository.GetAllReservations(offset, limit);
         }
 
         /// <summary>
         /// Gets information about a reservation from specified Order ID.
         /// </summary>
-        /// <param name="id">Unique reservation ID</param>
+        /// <param name="id">Unique reservation Order ID</param>
         /// <response code="200">Reservation information returned.</response>
         /// <response code="204">Reservation with specified Order ID not found.</response>
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
-        [HttpGet("{id}", Name = "GetReservation")]
-        public ActionResult<Reservation> GetReservation(Guid id)
+        [HttpGet("Order/{id}", Name = "GetReservationByOrderId")]
+        public ActionResult<Reservation> GetReservationByOrderId(Guid id)
         {
             var reservation = _reservationRepository.GetReservationByOrderId(id);
 
@@ -50,6 +52,19 @@ namespace PSP_AMEA_API.Controllers
                 return NoContent();
             }
 
+            return reservation;
+        }
+
+        /// <summary>
+        /// Gets information about a reservation from specified Location ID.
+        /// </summary>
+        /// <param name="id">Unique reservation Location ID</param>
+        /// <response code="200">Reservation information returned.</response>
+        [ProducesResponseType(200)]
+        [HttpGet("Location/{id}", Name = "GetReservationByLocationId")]
+        public IEnumerable<Reservation> GetReservationByLocationId(Guid id)
+        {
+            var reservation = _reservationRepository.GetReservationByLocationId(id);
             return reservation;
         }
 
@@ -76,7 +91,7 @@ namespace PSP_AMEA_API.Controllers
         [HttpPut("{id}", Name = "UpdateReservation")]
         public ActionResult<Reservation> UpdateReservation(Guid id, ReservationDto dto)
         {
-            var reservation = GetReservation(id);
+            var reservation = GetReservationByOrderId(id);
 
             if (reservation == null)
             {

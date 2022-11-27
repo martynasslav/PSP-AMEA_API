@@ -30,14 +30,19 @@ namespace PSP_AMEA_API.Repository
             reservations.Remove(reservation);
         }
 
-        public IEnumerable<Reservation> GetAllReservations()
+        public IEnumerable<Reservation> GetAllReservations(int offset, int limit)
         {
-            return reservations;
+            return reservations.Skip(offset).Take(limit);
         }
 
         public Reservation GetReservationByOrderId(Guid id)
         {
             return reservations.Find(r => r.OrderId == id);
+        }
+
+        public IEnumerable<Reservation> GetReservationByLocationId(Guid id)
+        {
+            return reservations.FindAll(r => r.LocationId == id);
         }
     }
 }
