@@ -1,13 +1,11 @@
-﻿using PSP_AMEA_API.DataModels;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PSP_AMEA_API.Dtos
 {
-
     public class CreateDiscountDto
     {
         [Required]
-        public Boolean IsLoyalty { get; set; }
+        public bool IsLoyalty { get; set; }
         [Required]
         public Guid LoyaltyTierId { get; set; }
         [Required]
@@ -17,9 +15,9 @@ namespace PSP_AMEA_API.Dtos
         [Required]
         public string Name { get; set; } = "Name";
         [Required]
-        public DiscountStatus Measure { get; set; }
+        public int DiscountPercenatge { get; set; }
         [Required]
-        public int Amount { get; set; }
+        public int CashbackPercenatge { get; set; }
         [Required]
         public int CashbackValidFor { get; set; }
         [Required]

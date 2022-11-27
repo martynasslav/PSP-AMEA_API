@@ -14,8 +14,8 @@ namespace PSP_AMEA_API.Repository
                 ValidFrom = DateTime.Today,
                 ValidTo = DateTime.Today.AddDays(7),
                 Name = "PercentageDiscount",
-                Measure = DataModels.DiscountStatus.Percentage,
-                Amount = 15,
+                DiscountPercenatge = 15,
+                CashbackPercenatge = 0,
                 CashbackValidFor = 0,
                 TenantId = Guid.NewGuid()
             },
@@ -27,7 +27,8 @@ namespace PSP_AMEA_API.Repository
                 ValidFrom = DateTime.Today,
                 ValidTo = DateTime.Today.AddDays(14),
                 Name = "CashbackDiscount",
-                Measure = DataModels.DiscountStatus.Cashback,
+                DiscountPercenatge = 10,
+                CashbackPercenatge = 5,
                 CashbackValidFor = 5,
                 TenantId = Guid.NewGuid()
             }
@@ -42,8 +43,8 @@ namespace PSP_AMEA_API.Repository
                 ValidFrom = dto.ValidFrom,
                 ValidTo = dto.ValidTo,
                 Name = dto.Name,
-                Measure = dto.Measure,
-                Amount = dto.Amount,
+                DiscountPercenatge = dto.DiscountPercenatge,
+                CashbackPercenatge = dto.CashbackPercenatge,
                 CashbackValidFor = dto.CashbackValidFor,
                 TenantId = dto.TenantId
             };
@@ -60,6 +61,11 @@ namespace PSP_AMEA_API.Repository
         public IEnumerable<Discount> GetAllDiscounts()
         {
             return discounts;
+        }
+
+        public IEnumerable<Guid> GetDiscountIds()
+        {
+            return discounts.Select(d => d.Id).ToList();
         }
 
         public Discount GetDiscountById(Guid id)

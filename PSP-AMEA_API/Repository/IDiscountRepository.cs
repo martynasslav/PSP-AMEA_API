@@ -9,6 +9,7 @@ namespace PSP_AMEA_API.Repository
         void UpdateDiscount(Discount discount);
         void DeleteDiscount(Discount discount);
         IEnumerable<Discount> GetAllDiscounts();
+        IEnumerable<Guid> GetDiscountIds();
         Discount GetDiscountById(Guid id);
     }
 }
