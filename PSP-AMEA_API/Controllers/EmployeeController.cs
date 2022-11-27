@@ -23,13 +23,22 @@ namespace PSP_AMEA_API.Controllers
 		/// <summary>
 		/// Gets information about all employees.
 		/// </summary>
+		/// <param name="offset">Index offset for the object list.</param>
+		/// <param name="limit">Number of objects to return.</param>
+		/// <param name="tenantId">Optional filtering by tenant id.</param>
 		/// <response code="200">Information about employees returned.</response>
 		[ProducesResponseType(200)]
 		[HttpGet]
-		public IEnumerable<EmployeeDto> GetEmployees()
+		public IEnumerable<EmployeeDto> GetEmployees(int offset = 0, int limit = 20, Guid? tenantId = null)
 		{
 			var employees = repository.GetEmployees().Select(employee => employee.AsDto());
-			return employees;
+
+			if (tenantId != null)
+			{
+				employees = employees.Where(e => e.TenantId == tenantId);
+			}
+
+			return employees.Skip(offset).Take(limit);
 		}
 
 		/// <summary>

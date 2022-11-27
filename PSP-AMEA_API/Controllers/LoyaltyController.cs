@@ -16,15 +16,24 @@ namespace PSP_AMEA_API.Controllers
             this.repository = repository;
         }
 
-        /// <summary>
+		/// <summary>
 		/// Gets information about all loyalties.
 		/// </summary>
+		/// <param name="offset">Index offset for the object list.</param>
+		/// <param name="limit">Number of objects to return.</param>
+		/// <param name="tenantId">Optional filtering by tenant id.</param>
 		/// <response code="200">Information about loyalties returned.</response>
-        [HttpGet]
-        public IEnumerable<LoyaltyDto> GetLoyalties()
+		[HttpGet]
+        public IEnumerable<LoyaltyDto> GetLoyalties(int offset = 0, int limit = 20, Guid? tenantId = null)
         {
             var loyalty = repository.GetAllLoyaltyPrograms().Select(loyalty => loyalty.AsDto());
-            return loyalty;
+
+            if (tenantId != null)
+            {
+                loyalty = loyalty.Where(l => l.TenantId == tenantId);
+            }
+
+            return loyalty.Skip(offset).Take(limit);
         }
 
         /// <summary>
