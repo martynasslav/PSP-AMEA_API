@@ -11,7 +11,9 @@ class Program
 	public static void Main()
 	{
 		var builder = WebApplication.CreateBuilder();
-    
+
+    builder.Services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
+		builder.Services.AddSingleton<ILoyaltyRepository, LoyaltyRepository>();
     builder.Services.AddSingleton<IDiscountRepository, DiscountRepository>();
 		builder.Services.AddSingleton<IDiscountItemRepository, DiscountItemRepository>();
 		builder.Services.AddSingleton<IShiftRepository, ShiftRepository>();
