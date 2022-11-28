@@ -25,5 +25,30 @@ namespace PSP_AMEA_API.Repository
                 TenantId = loyalty.TenantId,
             };
         }
+
+        public static CustomerDto AsDto(this Customer customer)
+        {
+            return new CustomerDto
+            {
+                Id = customer.Id,
+                TenantId = customer.TenantId,
+            };
+        }
+
+        public static UserDto AsDto(this User user)
+        {
+            return new UserDto
+            {
+                Id = user.Id
+            };
+        }
+
+        public static PositionDto AsDto(this Position position)
+        {
+            return new PositionDto
+            {
+                Id = position.Id
+            };
+        }
     }
 }
