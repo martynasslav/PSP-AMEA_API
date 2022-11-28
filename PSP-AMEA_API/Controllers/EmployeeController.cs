@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PSP_AMEA_API.DataModels;
+using PSP_AMEA_API.Repository;
 
 namespace PSP_AMEA_API.Controllers
 {
