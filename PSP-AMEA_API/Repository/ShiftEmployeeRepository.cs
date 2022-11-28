@@ -14,17 +14,9 @@ namespace PSP_AMEA_API.Repository
             }
         };
 
-        public ShiftEmployee CreateShiftEmployee(ShiftEmployeeDto dto)
+        public void CreateShiftEmployee(ShiftEmployee shiftEmployee)
         {
-            var shiftEmployee = new ShiftEmployee()
-            {
-                ShiftId = dto.ShiftId,
-                EmployeeId = dto.EmployeeId
-            };
-
             shiftEmployees.Add(shiftEmployee);
-
-            return shiftEmployee;
         }
 
         public void DeleteShiftEmployee(ShiftEmployee shiftEmployee)
@@ -37,9 +29,9 @@ namespace PSP_AMEA_API.Repository
             return shiftEmployees;
         }
 
-        public ShiftEmployee GetShiftEmployeeByShiftId(Guid id)
+        public IEnumerable<Guid> GetShiftEmployeeIdsByShiftId(Guid id)
         {
-            return shiftEmployees.Find(se => se.ShiftId == id);
+            return shiftEmployees.Where(s => s.ShiftId == id).Select(s => s.EmployeeId);
         }
 
         public void UpdateShiftEmployee(ShiftEmployee shiftEmployee)

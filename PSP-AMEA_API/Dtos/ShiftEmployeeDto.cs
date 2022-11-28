@@ -1,8 +1,10 @@
-﻿namespace PSP_AMEA_API.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PSP_AMEA_API.Dtos
 {
     public class ShiftEmployeeDto
     {
-        public Guid ShiftId { get; set; }
+        [Required]
         public Guid EmployeeId { get; set; }
     }
 }

@@ -20,20 +20,25 @@ namespace PSP_AMEA_API.Controllers
             _shiftEmployeeRepository = shiftEmployeeRepository;
         }
 
-        /// <summary>
-        /// Gets information about all shifts.
-        /// </summary>
-        /// <param name="tenantId" example="3fa85f64-5717-4562-b3fc-2c963f66afa6"> </param>
-        /// <param name="offset"> The first item to return</param>
-        /// <param name="limit"> The number of entries to return </param>
-        /// <response code="200">Shifts information returned</response>
-        [ProducesResponseType(200)]
+		/// <summary>
+		/// Gets information about all shifts.
+		/// </summary>
+		/// <param name="tenantId" example="3fa85f64-5717-4562-b3fc-2c963f66afa6">Optional filtering by tenant id</param>
+		/// <param name="offset">The first item to return</param>
+		/// <param name="limit">The number of entries to return</param>
+		/// <response code="200">Shifts information returned</response>
+		[ProducesResponseType(200)]
         [HttpGet(Name = "GetAllShifts")]
         public IEnumerable<Shift> GetAllShifts(int offset = 0, int limit = 20, Guid? tenantId = null)
         {
-            List<Shift> shifts = (List<Shift>)_shiftRepository.GetAllShifts();
+            var shifts = _shiftRepository.GetAllShifts();
 
-            return limit > shifts.Count ? shifts.GetRange(offset, shifts.Count) : shifts.GetRange(offset, limit);
+            if (tenantId != null)
+            {
+                shifts = shifts.Where(s => s.TenantId == tenantId);
+            }
+
+            return shifts.Skip(offset).Take(limit);  
         }
 
         /// <summary>
@@ -65,7 +70,17 @@ namespace PSP_AMEA_API.Controllers
         [HttpPost(Name = "CreateShift")]
         public ActionResult<Shift> CreateShift(CreateShiftDto dto)
         {
-            var shift = _shiftRepository.CreateShift(dto);
+            var shift = new Shift() {
+                Id = Guid.NewGuid(),
+                DateFrom = dto.DateFrom,
+                DateTo = dto.DateTo,
+                StartsAt = dto.StartsAt,
+                EndsAt = dto.EndsAt,
+                Type = dto.Type,
+                TenantId = dto.TenantId
+            };
+
+            _shiftRepository.CreateShift(shift);
 
             return CreatedAtAction("GetShift", new { id = shift.Id }, shift);
         }
@@ -127,15 +142,25 @@ namespace PSP_AMEA_API.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// Gets information about all shift types.
-        /// </summary>
-        /// <response code="200">Shift types information returned</response>
-        [ProducesResponseType(200)]
-        [HttpGet("/Type", Name = "GetAllShiftTypes")]
-        public IEnumerable<ShiftType> GetAllShiftTypes()
+		/// <summary>
+		/// Gets information about all shift types.
+		/// </summary>
+		/// <param name="tenantId" example="3fa85f64-5717-4562-b3fc-2c963f66afa6">Optional filtering by tenant id</param>
+		/// <param name="offset">The first item to return</param>
+		/// <param name="limit">The number of entries to return</param>
+		/// <response code="200">Shift types information returned</response>
+		[ProducesResponseType(200)]
+        [HttpGet("Type", Name = "GetAllShiftTypes")]
+        public IEnumerable<ShiftType> GetAllShiftTypes(int offset = 0, int limit = 50, Guid? tenantId = null)
         {
-            return _shiftTypeRepository.GetAllShiftTypes();
+            var shiftTypes = _shiftTypeRepository.GetAllShiftTypes();
+
+            if (tenantId != null)
+            {
+                shiftTypes = shiftTypes.Where(s => s.TenantId == tenantId);
+            }
+
+            return shiftTypes.Skip(offset).Take(limit);
         }
 
         /// <summary>
@@ -146,7 +171,7 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="204">Shift type information not found.</response>
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
-        [HttpGet("/Type{id}", Name = "GetShiftType")]
+        [HttpGet("Type/{id}", Name = "GetShiftType")]
         public ActionResult<ShiftType> GetShiftType(Guid id)
         {
             var shiftType = _shiftTypeRepository.GetShiftTypeById(id);
@@ -164,10 +189,16 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <response code="201">Shift type created</response>
         [ProducesResponseType(201)]
-        [HttpPost("/Type",Name = "CreateShiftType")]
+        [HttpPost("Type", Name = "CreateShiftType")]
         public ActionResult<ShiftType> CreateShiftType(CreateShiftTypeDto dto)
         {
-            var shiftType = _shiftTypeRepository.CreateShiftType(dto);
+            var shiftType = new ShiftType() {
+                Id = Guid.NewGuid(),
+                Name = dto.Name,
+                TenantId = dto.TenantId
+            };
+
+            _shiftTypeRepository.CreateShiftType(shiftType);
 
             return CreatedAtAction("GetShiftType", new { id = shiftType.Id }, shiftType);
         }
@@ -180,7 +211,7 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="404">There is no such shift type.</response>
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        [HttpPut("/Type{id}", Name = "UpdateShiftType")]
+        [HttpPut("Type/{id}", Name = "UpdateShiftType")]
         public ActionResult<ShiftType> UpdateShift(Guid id, CreateShiftTypeDto dto)
         {
             var shiftType = _shiftTypeRepository.GetShiftTypeById(id);
@@ -210,8 +241,8 @@ namespace PSP_AMEA_API.Controllers
         /// <response code="404">There is no such shift type.</response>
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        [HttpDelete("/Type{id}")]
-        public ActionResult<ShiftType> DeleteShiftType(Guid id)
+        [HttpDelete("Type/{id}")]
+        public ActionResult DeleteShiftType(Guid id)
         {
             var shiftType = _shiftTypeRepository.GetShiftTypeById(id);
 
@@ -226,97 +257,52 @@ namespace PSP_AMEA_API.Controllers
         }
 
         /// <summary>
-        /// Gets information about all shift employees
+        /// Gets all employee identifiers assigned to a shift
         /// </summary>
+        /// <param name="id">Unique shift identifier</param>
         /// <response code="200">Shift employees information returned</response>
         [ProducesResponseType(200)]
-        [HttpGet("/Employee", Name = "GetShiftEmployees")]
-        public IEnumerable<ShiftEmployee> GetAllShiftEmployees()
+        [HttpGet("{id}/Employee")]
+        public IEnumerable<Guid> GetShiftEmployeeIdsByShiftId(Guid id)
         {
-            return _shiftEmployeeRepository.GetAllShiftEmployees();
+            return _shiftEmployeeRepository.GetShiftEmployeeIdsByShiftId(id);
         }
 
         /// <summary>
-        /// Get information about a shift employee from specific shift ID.
-        /// </summary>
-        /// <param name="id">Unqiue shift ID</param>
-        /// <response code="200">Shift employee information returned</response>
-        /// <response code="204">Shift employee not found.</response>
-        [ProducesResponseType(200)]
-        [ProducesResponseType(204)]
-        [HttpGet("/Employee{id}", Name = "GetShiftEmployeeByShiftId")]
-        public ActionResult<ShiftEmployee> GetShiftEmployeeByShiftId(Guid id)
-        {
-            var shiftEmployee = _shiftEmployeeRepository.GetShiftEmployeeByShiftId(id);
-
-            if (shiftEmployee == null)
-            {
-                return NoContent();
-            }
-
-            return shiftEmployee;
-        }
-
-        /// <summary>
-        /// Create a shift employee.
+        /// Assign employee to shift
         /// </summary>
         /// <param name="id"></param>
         /// <response code="201">Shift employee created</response>
         [ProducesResponseType(201)]
-        [HttpPost("/Employee",Name = "AssignShiftEmployee")]
-        public ActionResult<ShiftEmployee> AssignShiftEmployee(ShiftEmployeeDto dto)
+        [HttpPost("{id}/Employee", Name = "AssignShiftEmployee")]
+        public ActionResult<ShiftEmployee> AssignShiftEmployee(Guid id, ShiftEmployeeDto dto)
         {
-            var shiftEmployee = _shiftEmployeeRepository.CreateShiftEmployee(dto);
+            var shiftEmployee = new ShiftEmployee() {
+                ShiftId = id,
+                EmployeeId = dto.EmployeeId
+            };
+
+            _shiftEmployeeRepository.CreateShiftEmployee(shiftEmployee);
 
             return CreatedAtAction("GetShiftEmployeeByShiftId", new { id = shiftEmployee.ShiftId }, shiftEmployee);
         }
 
-        /// <summary>
-        /// Update a shift employee's information.
-        /// </summary>
-        /// <param name="id">Unqiue shift ID</param>
-        /// <response code="200">Shift employee updated</response>
-        /// <response code="404">There is no such shift with this employee.</response>
-        [ProducesResponseType(200)]
+		/// <summary>
+		/// Removes an employee from shift
+		/// </summary>
+		/// <param name="shiftId">Unqiue shift ID</param>
+        /// <param name="employeeId">Unique employee ID</param>
+		/// <response code="200">Employee successfully removed from shift.</response>
+		/// <response code="404">There is no such shift with this employee.</response>
+		[ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        [HttpPut("/Employee{id}", Name = "UpdateShiftEmployee")]
-        public ActionResult<ShiftEmployee> UpdateShiftEmployee(Guid id, UpdateShiftEmployeeDto dto)
+        [HttpDelete("{shiftId}/Employee/{employeeId}")]
+        public ActionResult<ShiftEmployee> DeleteShiftEmployee(Guid shiftId, Guid employeeId)
         {
-            var shiftEmployee = _shiftEmployeeRepository.GetShiftEmployeeByShiftId(id);
-
-            if (shiftEmployee == null)
-            {
-                return NotFound();
-            }
-
-            ShiftEmployee updatedShiftEmployee = new()
-            {
-                ShiftId = shiftEmployee.ShiftId,
-                EmployeeId = dto.EmployeeId
+            var shiftEmployee = new ShiftEmployee() {
+                ShiftId = shiftId,
+                EmployeeId = employeeId
             };
-
-            _shiftEmployeeRepository.UpdateShiftEmployee(updatedShiftEmployee);
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// Deletes a shift employee.
-        /// </summary>
-        /// <param name="id">Unqiue shift ID</param>
-        /// <response code="200">Shift employee successfully deleted</response>
-        /// <response code="404">There is no such shift with this employee.</response>
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [HttpDelete("/Employee{id}")]
-        public ActionResult<ShiftEmployee> DeleteShiftEmployee(Guid id)
-        {
-            var shiftEmployee = _shiftEmployeeRepository.GetShiftEmployeeByShiftId(id);
-
-            if (shiftEmployee == null)
-            {
-                return NotFound();
-            }
 
             _shiftEmployeeRepository.DeleteShiftEmployee(shiftEmployee);
 

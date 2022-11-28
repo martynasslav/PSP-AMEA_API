@@ -5,7 +5,7 @@ namespace PSP_AMEA_API.Repository
 {
     public interface IShiftTypeRepository
     {
-        ShiftType CreateShiftType(CreateShiftTypeDto dto);
+		void CreateShiftType(ShiftType shiftType);
         void UpdateShiftType(ShiftType shiftType);
         void DeleteShiftType(ShiftType shiftType);
         IEnumerable<ShiftType> GetAllShiftTypes();

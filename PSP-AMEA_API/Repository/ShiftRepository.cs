@@ -29,21 +29,9 @@ namespace PSP_AMEA_API.Repository
             }
         };
 
-        public Shift CreateShift(CreateShiftDto dto)
+        public void CreateShift(Shift shift)
         {
-            var shift = new Shift
-            {
-                Id = Guid.NewGuid(),
-                DateFrom = dto.DateFrom,
-                DateTo = dto.DateTo,
-                StartsAt = dto.StartsAt,
-                EndsAt = dto.EndsAt,
-                Type = dto.Type,
-                TenantId = dto.TenantId
-            };
             shifts.Add(shift);
-
-            return shift;
         }
 
         public void DeleteShift(Shift shift)

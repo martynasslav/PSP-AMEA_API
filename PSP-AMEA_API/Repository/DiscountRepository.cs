@@ -34,23 +34,9 @@ namespace PSP_AMEA_API.Repository
             }
         };
 
-        public Discount CreateDiscount(CreateDiscountDto dto)
+        public void CreateDiscount(Discount discount)
         {
-            var discount = new Discount()
-            {
-                Id = Guid.NewGuid(),
-                IsLoyalty = dto.IsLoyalty,
-                ValidFrom = dto.ValidFrom,
-                ValidTo = dto.ValidTo,
-                Name = dto.Name,
-                DiscountPercenatge = dto.DiscountPercenatge,
-                CashbackPercenatge = dto.CashbackPercenatge,
-                CashbackValidFor = dto.CashbackValidFor,
-                TenantId = dto.TenantId
-            };
             discounts.Add(discount);
-
-            return discount;
         }
 
         public void DeleteDiscount(Discount discount)

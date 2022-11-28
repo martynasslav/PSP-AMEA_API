@@ -23,36 +23,25 @@ namespace PSP_AMEA_API.Controllers
             _discountItemRepository = discountItemRepository;
         }
 
-        /// <summary>
-        /// Gets information about all available discounts.
-        /// </summary>
-        /// <param name="offset"> The first item to return</param>
-        /// <param name="limit"> The number of entries to return </param>
-        /// <param name="tenantId" example="3fa85f64-5717-4562-b3fc-2c963f66afa6"> </param>
-        /// <response code="200">Discounts information returned.</response>
-        [ProducesResponseType(200)]
+		/// <summary>
+		/// Gets information about all available discounts.
+		/// </summary>
+		/// <param name="offset">The first item to return</param>
+		/// <param name="limit">The number of entries to return</param>
+		/// <param name="tenantId" example="3fa85f64-5717-4562-b3fc-2c963f66afa6">Optional filtering by tenant id</param>
+		/// <response code="200">Discounts information returned.</response>
+		[ProducesResponseType(200)]
         [HttpGet(Name = "GetDiscounts")]
         public IEnumerable<Discount> GetAllDiscounts(int offset = 0, int limit = 20, Guid? tenantId = null)
         {
-            List<Discount> discounts = (List<Discount>)_discountRepository.GetAllDiscounts();
+            var discounts = _discountRepository.GetAllDiscounts();
 
-            return limit > discounts.Count ? discounts.GetRange(offset, discounts.Count) : discounts.GetRange(offset, limit);
-        }
+            if (tenantId != null)
+            {
+                discounts = discounts.Where(d => d.TenantId == tenantId);
+            }
 
-        /// <summary>
-        /// Gets a list of discount ids.
-        /// </summary>
-        /// <param name="offset"> The first item to return</param>
-        /// <param name="limit"> The number of entries to return </param>
-        /// <param name="tenantId" example="3fa85f64-5717-4562-b3fc-2c963f66afa6"> </param>
-        /// <response code="200">Discount ids returned.</response>
-        [ProducesResponseType(200)]
-        [HttpGet("v1/Discount/Ids", Name = "GetAllDiscountIds")]
-        public ActionResult<IEnumerable<Guid>> GetAllDiscountIds(int offset = 0, int limit = 20, Guid? tenantId = null)
-        {
-            List<Guid> discounts = (List<Guid>)_discountRepository.GetDiscountIds();
-
-            return Ok(limit > discounts.Count ? discounts.GetRange(offset, discounts.Count) : discounts.GetRange(offset, limit));
+            return discounts.Skip(offset).Take(limit);
         }
 
         /// <summary>
@@ -84,7 +73,20 @@ namespace PSP_AMEA_API.Controllers
         [HttpPost(Name = "CreateDiscount")]
         public ActionResult<Discount> CreateDiscount(CreateDiscountDto dto)
         {
-            var discount = _discountRepository.CreateDiscount(dto);
+            var discount = new Discount() {
+                Id = Guid.NewGuid(),
+                IsLoyalty = dto.IsLoyalty,
+                LoyaltyTierId = dto.LoyaltyTierId,
+                ValidFrom = dto.ValidFrom,
+                ValidTo = dto.ValidTo,
+                Name = dto.Name,
+                DiscountPercenatge = dto.DiscountPercenatge,
+                CashbackPercenatge = dto.CashbackPercenatge,
+                CashbackValidFor = dto.CashbackValidFor,
+                TenantId = dto.TenantId
+            };
+
+            _discountRepository.CreateDiscount(discount);
 
             return CreatedAtAction("GetDiscount", new { id = discount.Id }, discount);
         }
@@ -149,24 +151,24 @@ namespace PSP_AMEA_API.Controllers
         }
 
         /// <summary>
-        /// Gets information about a discount item from specified discount ID.
+        /// Gets item identifiers assigned to a discount.
         /// </summary>
         /// <param name="id">Unique discount ID</param>
         /// <response code="200">Discount item information returned.</response>
         /// <response code="404">Discount item not found.</response>
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        [HttpGet("/DiscountItem{id}", Name = "GetDiscountItemByDiscountId")]
-        public ActionResult<DiscountItem> GetDiscountItemByDiscountId(Guid id)
+        [HttpGet("{id}/Item", Name = "GetDiscountItemByDiscountId")]
+        public ActionResult<IEnumerable<Guid>> GetDiscountItemIdsByDiscountId(Guid id)
         {
-            var discountItem = _discountItemRepository.GetDiscountItemByDiscountId(id);
+            var discountItemIds = _discountItemRepository.GetDiscountItemIdsByDiscountId(id);
 
-            if (discountItem == null)
+            if (discountItemIds == null)
             {
                 return NoContent();
             }
 
-            return discountItem;
+            return Ok(discountItemIds);
         }
 
         /// <summary>
@@ -174,59 +176,35 @@ namespace PSP_AMEA_API.Controllers
         /// </summary>
         /// <response code="201">Discount successfully assigned to item.</response>
         [ProducesResponseType(201)]
-        [HttpPost("/DiscountItem{id}", Name = "AssignDiscount")]
-        public ActionResult<DiscountItem> AssignDiscount(DiscountItemDto dto)
+        [HttpPost("{id}/Item", Name = "AssignDiscount")]
+        public ActionResult<DiscountItem> AssignDiscount(Guid id, DiscountItemDto dto)
         {
-            var discountItem = _discountItemRepository.CreateDiscountItem(dto);
-
-            return CreatedAtAction("GetDiscountItemByDiscountId", new { id = discountItem.DisountId }, discountItem);
-        }
-
-        /// <summary>
-        /// Updates discount item's information.
-        /// </summary>
-        /// <param name="id">Unique discount ID</param>
-        /// <response code="200">Discount item's information updated.</response>
-        /// <response code="404">Discount item not found.</response>
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [HttpPut("/DiscountItem{id}", Name = "UpdateDiscountItem")]
-        public ActionResult<DiscountItem> UpdateDiscountItem(Guid id, UpdateDiscountItemDto dto)
-        {
-            var discountItem = _discountItemRepository.GetDiscountItemByDiscountId(id);
-
-            if (discountItem == null)
-            {
-                return NotFound();
-            }
-            DiscountItem updatedDiscountItem = new()
-            {
+            var discountItem = new DiscountItem() {
                 DisountId = id,
                 ItemId = dto.ItemId
             };
+                     
+             _discountItemRepository.CreateDiscountItem(discountItem);
 
-            _discountItemRepository.UpdateDiscountItem(updatedDiscountItem);
-
-            return Ok();
+            return Ok(discountItem);
         }
 
-        /// <summary>
-        /// Deletes a discount item.
-        /// </summary>
-        /// <param name="id">Unique discount ID</param>
-        /// <response code="200">Discount item successfully deleted.</response>
-        /// <response code="404">Discount item not found.</response>
-        [ProducesResponseType(200)]
+		/// <summary>
+		/// Deletes a discount item.
+		/// </summary>
+		/// <param name="discountId">Unique discount ID</param>
+        /// <param name="itemId">Unique item ID</param>
+		/// <response code="200">Discount item successfully deleted.</response>
+		/// <response code="404">Discount item not found.</response>
+		[ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        [HttpDelete("/DiscountItem{id}")]
-        public ActionResult<DiscountItem> DeleteDiscountItem(Guid id)
+        [HttpDelete("{discountId}/Item/{itemId}")]
+        public ActionResult DeleteDiscountItem(Guid discountId, Guid itemId)
         {
-            var discountItem = _discountItemRepository.GetDiscountItemByDiscountId(id);
-
-            if (discountItem == null)
-            {
-                return NotFound();
-            }
+            var discountItem = new DiscountItem() {
+                ItemId = itemId,
+                DisountId = discountId
+            };
 
             _discountItemRepository.DeleteDiscountItem(discountItem);
 

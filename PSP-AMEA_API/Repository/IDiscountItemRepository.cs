@@ -5,10 +5,9 @@ namespace PSP_AMEA_API.Repository
 {
     public interface IDiscountItemRepository
     {
-        DiscountItem CreateDiscountItem(DiscountItemDto dto);
-        void UpdateDiscountItem(DiscountItem discountItem);
+        void CreateDiscountItem(DiscountItem discountItem);
         void DeleteDiscountItem(DiscountItem discountItem);
         IEnumerable<DiscountItem> GetAllDiscountItems();
-        DiscountItem GetDiscountItemByDiscountId(Guid id);
+        IEnumerable<Guid> GetDiscountItemIdsByDiscountId(Guid id);
     }
 }

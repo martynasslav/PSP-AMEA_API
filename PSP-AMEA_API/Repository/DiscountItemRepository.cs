@@ -14,17 +14,9 @@ namespace PSP_AMEA_API.Repository
             }
         };
 
-        public DiscountItem CreateDiscountItem(DiscountItemDto dto)
+        public void CreateDiscountItem(DiscountItem discountItem)
         {
-            var discountItem = new DiscountItem
-            {
-                DisountId = dto.DisountId,
-                ItemId = dto.ItemId
-            };
-
             discountItems.Add(discountItem);
-
-            return discountItem;
         }
 
         public void DeleteDiscountItem(DiscountItem discountItem)
@@ -37,15 +29,9 @@ namespace PSP_AMEA_API.Repository
             return discountItems;
         }
 
-        public DiscountItem GetDiscountItemByDiscountId(Guid id)
+        public IEnumerable<Guid> GetDiscountItemIdsByDiscountId(Guid id)
         {
-            return discountItems.Find(d => d.DisountId == id);
-        }
-
-        public void UpdateDiscountItem(DiscountItem discountItem)
-        {
-            var id = discountItems.FindIndex(d => d.DisountId == discountItem.DisountId);
-            discountItems[id] = discountItem;
+            return discountItems.Where(d => d.DisountId == id).Select(d => d.ItemId);
         }
     }
 }

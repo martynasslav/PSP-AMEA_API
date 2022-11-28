@@ -15,18 +15,9 @@ namespace PSP_AMEA_API.Repository
             }
         };
 
-        public ShiftType CreateShiftType(CreateShiftTypeDto dto)
+        public void CreateShiftType(ShiftType shiftType)
         {
-            var shiftType = new ShiftType
-            {
-                Id = Guid.NewGuid(),
-                Name = dto.Name,
-                TenantId = dto.TenantId
-            };
-
             shiftTypes.Add(shiftType);
-
-            return shiftType;
         }
 
         public void DeleteShiftType(ShiftType shiftType)
