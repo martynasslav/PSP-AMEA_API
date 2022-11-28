@@ -78,7 +78,7 @@ namespace PSP_AMEA_API.Controllers
 
 			repository.UpdateCustomer(updatedCustomer);
 
-			return NoContent();
+			return Ok();
 		}
 
 		[HttpDelete("{id}")]
@@ -93,7 +93,7 @@ namespace PSP_AMEA_API.Controllers
 
 			repository.DeleteCustomer(id);
 
-			return NoContent();
+			return Ok();
 		}
 	}
 }
