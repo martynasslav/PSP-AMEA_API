@@ -5,7 +5,9 @@ using PSP_AMEA_API.Repository;
 
 namespace PSP_AMEA_API.Controllers
 {
-    public class CustomerController : Controller
+	[Route("v1/[controller]")]
+	[ApiController]
+	public class CustomerController : Controller
     {
         private readonly ICustomerRepository repository;
 

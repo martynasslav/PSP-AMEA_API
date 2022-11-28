@@ -5,7 +5,9 @@ using PSP_AMEA_API.Repository;
 
 namespace PSP_AMEA_API.Controllers
 {
-    public class PositionController : Controller
+	[Route("v1/[controller]")]
+	[ApiController]
+	public class PositionController : Controller
     {
         private readonly IPositionRepository repository;
 
