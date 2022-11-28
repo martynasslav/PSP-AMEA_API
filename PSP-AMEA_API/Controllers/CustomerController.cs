@@ -16,6 +16,13 @@ namespace PSP_AMEA_API.Controllers
             this.repository = repository;
         }
 
+		/// <summary>
+		/// Gets information about all customers.
+		/// </summary>
+		/// <param name="offset">Index offset for the object list.</param>
+		/// <param name="limit">Number of objects to return.</param>
+		/// <param name="tenantId">Optional filtering by tenant id.</param>
+		/// <response code="200">Information about customers returned.</response>
 		[ProducesResponseType(200)]
 		[HttpGet]
 		public IEnumerable<CustomerDto> GetCustomers(int offset = 0, int limit = 20, Guid? tenantId = null)
@@ -30,6 +37,11 @@ namespace PSP_AMEA_API.Controllers
 			return employees.Skip(offset).Take(limit);
 		}
 
+		/// <summary>
+		/// Gets information a customer.
+		/// </summary>
+		/// <param name="id">Customer id.</param>
+		/// <response code="200">Information about customer returned.</response>
 		[ProducesResponseType(200)]
 		[HttpGet("{id}", Name = "GetCustomer")]
 		public ActionResult<CustomerDto> GetCustomer(Guid id)
@@ -42,6 +54,11 @@ namespace PSP_AMEA_API.Controllers
 			return customer.AsDto();
 		}
 
+		/// <summary>
+		/// Creates a customer.
+		/// </summary>
+		/// <param name="customerDto">Customer dto.</param>
+		/// <response code="200">Customer created.</response>
 		[HttpPost]
 		public ActionResult<CustomerDto> CreateCustomer(CreateCustomerDto customerDto)
 		{
@@ -58,6 +75,12 @@ namespace PSP_AMEA_API.Controllers
 			return CreatedAtAction(nameof(GetCustomer), new { id = customer.Id }, customer.AsDto());
 		}
 
+		/// <summary>
+		/// Upadtes a customer.
+		/// </summary>
+		/// <param name="id">Customer id.</param>
+		/// <param name="customerDto">Customer dto.</param>
+		/// <response code="200">Customer updated.</response>
 		[HttpPut("{id}")]
 		public ActionResult UpdateEmployee(Guid id, UpdateCustomerDto customerDto)
 		{
@@ -81,6 +104,11 @@ namespace PSP_AMEA_API.Controllers
 			return Ok();
 		}
 
+		/// <summary>
+		/// Delete a customer.
+		/// </summary>
+		/// <param name="id">Customer id.</param>
+		/// <response code="200">Customer deleted.</response>
 		[HttpDelete("{id}")]
 		public ActionResult DeleteCustomer(Guid id)
 		{
