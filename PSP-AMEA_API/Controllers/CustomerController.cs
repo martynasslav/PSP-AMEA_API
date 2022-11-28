@@ -29,7 +29,7 @@ namespace PSP_AMEA_API.Controllers
 		}
 
 		[ProducesResponseType(200)]
-		[HttpGet("{id}", Name = "GetUser")]
+		[HttpGet("{id}", Name = "GetCustomer")]
 		public ActionResult<CustomerDto> GetCustomer(Guid id)
 		{
 			var customer = repository.GetCustomer(id);
