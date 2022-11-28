@@ -18,7 +18,7 @@ namespace PSP_AMEA_API.Controllers
 
 		[ProducesResponseType(200)]
 		[HttpGet]
-		public IEnumerable<PositionDto> GetPositions(int offset = 0, int limit = 20, Guid? tenantId = null)
+		public IEnumerable<PositionDto> GetPositions(int offset = 0, int limit = 20)
 		{
 			var positions = repository.GetPositions().Select(position => position.AsDto());
 
