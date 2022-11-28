@@ -11,13 +11,18 @@ class Program
 	public static void Main()
 	{
 		var builder = WebApplication.CreateBuilder();
-
-		builder.Services.AddSingleton<IDiscountRepository, DiscountRepository>();
+    
+    builder.Services.AddSingleton<IDiscountRepository, DiscountRepository>();
 		builder.Services.AddSingleton<IDiscountItemRepository, DiscountItemRepository>();
 		builder.Services.AddSingleton<IShiftRepository, ShiftRepository>();
 		builder.Services.AddSingleton<IShiftTypeRepository, ShiftTypeRepository>();
 		builder.Services.AddSingleton<IShiftEmployeeRepository, ShiftEmployeeRepository>();
-		builder.Services.AddControllers();
+    builder.Services.AddSingleton<IInvoiceRepository, InvoiceRepository>();
+    builder.Services.AddSingleton<ILocationRepository, LocationRepository>();
+    builder.Services.AddSingleton<IReservationRepository, ReservationRepository>();
+    builder.Services.AddSingleton<ITenantRepository, TenantRepository>();
+    
+    builder.Services.AddControllers();
 		builder.Services.AddEndpointsApiExplorer();
 		builder.Services.AddSwaggerGen(c => {
 			c.SwaggerDoc("v1", new OpenApiInfo { Title = "AMEA API", Version = "v1" });
