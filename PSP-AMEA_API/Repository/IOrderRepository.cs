@@ -6,7 +6,7 @@ namespace PSP_AMEA_API.Repository
 	{
 		void CreateOrder(Order order);
 		Order? GetOrder(Guid id);
-		IEnumerable<Guid> GetOrderIds();
+		IEnumerable<Order> GetOrders();
 		void UpdateOrder(Order order);
 		void DeleteOrder(Guid id);
 	}

@@ -22,9 +22,9 @@ namespace PSP_AMEA_API.Repository
 			return carts.SingleOrDefault(c => c.OrderId == orderId && c.ItemId == itemId);
 		}
 
-		public IEnumerable<Guid> GetOrderCartIds(Guid orderId)
+		public IEnumerable<Cart> GetOrderCarts(Guid orderId)
 		{
-			return carts.Where(c => c.OrderId == orderId).Select(c => c.ItemId);
+			return carts.Where(c => c.OrderId == orderId);
 		}
 
 		public void DeleteCart(Guid orderId, Guid itemId)

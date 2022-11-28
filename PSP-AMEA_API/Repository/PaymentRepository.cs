@@ -16,9 +16,9 @@ namespace PSP_AMEA_API.Repository
 			payments.RemoveAll(p => p.Id == paymentId);
 		}
 
-		public IEnumerable<Guid> GetOrderPaymentIds(Guid orderId)
+		public IEnumerable<Payment> GetOrderPayments(Guid orderId)
 		{
-			return payments.Where(p => p.OrderId == orderId).Select(p => p.Id);
+			return payments.Where(p => p.OrderId == orderId);
 		}
 
 		public Payment? GetPaymentById(Guid paymentId)

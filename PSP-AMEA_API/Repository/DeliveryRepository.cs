@@ -32,9 +32,9 @@ namespace PSP_AMEA_API.Repository
 			return deliveries.SingleOrDefault(d => d.Id == deliveryId);
 		}
 
-		public IEnumerable<Guid> GetOrderDeliveryIds(Guid orderId)
+		public IEnumerable<Delivery> GetOrderDeliveries(Guid orderId)
 		{
-			return deliveries.Where(d => d.OrderId == orderId).Select(d => d.Id);
+			return deliveries.Where(d => d.OrderId == orderId);
 		}
 
 		public void UpdateDelivery(Delivery delivery)

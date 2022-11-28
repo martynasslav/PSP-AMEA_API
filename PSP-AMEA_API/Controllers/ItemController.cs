@@ -85,13 +85,15 @@ namespace PSP_AMEA_API.Controllers
 		/// Gets a list of review identifiers.
 		/// </summary>
 		/// <param name="id">Unique item identifier</param>
+		/// <param name="limit">Number of entries to return</param>
+		/// <param name="offset">Index of entry to start counting from</param>
 		/// <returns></returns>
 		/// <response code="200">List with identifiers was returned.</response>
 		[ProducesResponseType(200)]
 		[HttpGet("{id}/Review")]
-		public ActionResult<IEnumerable<Review>> GetItemReviewIds(Guid id)
+		public ActionResult<IEnumerable<Review>> GetItemReviewIds(Guid id, int offset = 0, int limit = 20)
 		{
-			return Ok(_reviewRepository.GetItemReviews(id));
+			return Ok(_reviewRepository.GetItemReviews(id).Skip(offset).Take(limit));
 		}
 
 		/// <summary>

@@ -22,9 +22,9 @@ namespace PSP_AMEA_API.Repository
 			orders.RemoveAll(o => o.Id == id);
 		}
 
-		public IEnumerable<Guid> GetOrderIds()
+		public IEnumerable<Order> GetOrders()
 		{
-			return orders.Select(o => o.Id);
+			return orders;
 		}
 
 		public Order? GetOrder(Guid id)

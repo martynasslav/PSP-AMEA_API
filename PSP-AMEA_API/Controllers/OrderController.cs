@@ -23,15 +23,25 @@ namespace PSP_AMEA_API.Controllers
 		}
 
 		/// <summary>
-		/// Get all order identifiers.
+		/// Get orders.
 		/// </summary>
+		/// <param name="limit">Number of entries to return</param>
+		/// <param name="offset">Entry index to start counting from</param>
+		/// <param name="tenantId">Optional tenant identifier to filter orders</param>
 		/// <returns></returns>
 		/// <response code="200">List of order identifiers was returned.</response>
 		[ProducesResponseType(200)]
 		[HttpGet]
-		public ActionResult<IEnumerable<Guid>> GetOrderIds()
+		public ActionResult<IEnumerable<Order>> GetOrders(int offset = 0, int limit = 20, Guid? tenantId = null)
 		{
-			return Ok(_orderRepository.GetOrderIds());
+			var orders = _orderRepository.GetOrders();
+
+			if(tenantId != null)
+			{
+				orders = orders.Where(o => o.TenantId == tenantId);
+			}
+
+			return Ok(orders.Skip(offset).Take(limit));
 		}
 
 		/// <summary>
@@ -132,9 +142,9 @@ namespace PSP_AMEA_API.Controllers
 		[ProducesResponseType(200)]
 		[ProducesResponseType(404)]
 		[HttpGet("{id}/Cart")]
-		public ActionResult<IEnumerable<Guid>> GetOrderCartIds(Guid id)
+		public ActionResult<IEnumerable<Cart>> GetOrderCartIds(Guid id)
 		{
-			return Ok(_cartRepository.GetOrderCartIds(id));
+			return Ok(_cartRepository.GetOrderCarts(id));
 		}
 
 		/// <summary>
@@ -232,9 +242,9 @@ namespace PSP_AMEA_API.Controllers
 		/// <response code="200">List of identifiers was returned.</response>
 		[ProducesResponseType(200)]
 		[HttpGet("{id}/Payment")]
-		public ActionResult<IEnumerable<Guid>> GetOrderPaymentIds(Guid id)
+		public ActionResult<IEnumerable<Payment>> GetOrderPayments(Guid id)
 		{
-			return Ok(_paymentRepository.GetOrderPaymentIds(id));
+			return Ok(_paymentRepository.GetOrderPayments(id));
 		}
 
 		/// <summary>
@@ -267,9 +277,9 @@ namespace PSP_AMEA_API.Controllers
 		/// <response code="200">List of identifiers was returned.</response>
 		[ProducesResponseType(200)]
 		[HttpGet("{id}/Delivery")]
-		public ActionResult<IEnumerable<Guid>> GetOrderDeliveryIds(Guid id)
+		public ActionResult<IEnumerable<Delivery>> GetOrderDeliveryIds(Guid id)
 		{
-			return Ok(_deliveryRepository.GetOrderDeliveryIds(id));
+			return Ok(_deliveryRepository.GetOrderDeliveries(id));
 		}
 
 		/// <summary>

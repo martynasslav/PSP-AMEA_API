@@ -7,7 +7,7 @@ namespace PSP_AMEA_API.Repository
 		void CreateDelivery(Delivery delivery);
 		void UpdateDelivery(Delivery delivery);
 		void DeleteDelivery(Guid deliveryId);
-		IEnumerable<Guid> GetOrderDeliveryIds(Guid orderId);
+		IEnumerable<Delivery> GetOrderDeliveries(Guid orderId);
 		Delivery? GetDelivery(Guid deliveryId);
 	}
 }
