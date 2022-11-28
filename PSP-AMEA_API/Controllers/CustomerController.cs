@@ -76,7 +76,7 @@ namespace PSP_AMEA_API.Controllers
 		}
 
 		/// <summary>
-		/// Upadtes a customer.
+		/// Updates a customer.
 		/// </summary>
 		/// <param name="id">Customer id.</param>
 		/// <param name="customerDto">Customer dto.</param>
