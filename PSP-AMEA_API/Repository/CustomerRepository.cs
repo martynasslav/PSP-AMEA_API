@@ -28,13 +28,13 @@ namespace PSP_AMEA_API.Repository
 
         public void UpdateCustomer(Customer customer)
         {
-            var index = customers.FindIndex(existingEmployee => existingEmployee.Id == customer.Id);
+            var index = customers.FindIndex(existingCustomer => existingCustomer.Id == customer.Id);
             customers[index] = customer;
         }
 
         public void DeleteCustomer(Guid id)
         {
-            var index = customers.FindIndex(existingEmployee => existingEmployee.Id == id);
+            var index = customers.FindIndex(existingCustomer => existingCustomer.Id == id);
             customers.RemoveAt(index);
         }
 
