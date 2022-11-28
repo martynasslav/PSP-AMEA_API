@@ -1,7 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using PSP_AMEA_API.Repository;
 using System.Reflection;
@@ -12,6 +8,12 @@ class Program
 	{
 		var builder = WebApplication.CreateBuilder();
 
+		builder.Services.AddSingleton<ICartRepository, CartRepository>();
+		builder.Services.AddSingleton<IDeliveryRepository, DeliveryRepository>();
+		builder.Services.AddSingleton<IItemRepository, ItemRepository>();
+		builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
+		builder.Services.AddSingleton<IPaymentRepository, PaymentRepository>();
+		builder.Services.AddSingleton<IReviewRepository, ReviewRepository>();
     builder.Services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
 		builder.Services.AddSingleton<ILoyaltyRepository, LoyaltyRepository>();
     builder.Services.AddSingleton<IDiscountRepository, DiscountRepository>();

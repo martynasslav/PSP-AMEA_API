@@ -1,11 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using PSP_AMEA_API.DataModels;
-using PSP_AMEA_API.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PSP_AMEA_API.Controllers
 {
